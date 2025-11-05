@@ -47,7 +47,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 **Clonar el repositorio**
 
 git clone https://github.com/iT0XHL/Sistema-de-Reserva-de-Laboratorios-FISI.git
-cd <Sistema-de-Reserva-de-Laboratorios-FISI>
+cd Sistema-de-Reserva-de-Laboratorios-FISI
     
 **Configurar la base de datos**
 
