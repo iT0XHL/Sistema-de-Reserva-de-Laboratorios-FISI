@@ -47,6 +47,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 **Clonar el repositorio**
 
 git clone https://github.com/iT0XHL/Sistema-de-Reserva-de-Laboratorios-FISI.git
+
 cd Sistema-de-Reserva-de-Laboratorios-FISI
     
 **Configurar la base de datos**
@@ -54,8 +55,11 @@ cd Sistema-de-Reserva-de-Laboratorios-FISI
 Edita el archivo src/main/resources/application.properties:
 
 spring.datasource.url=jdbc:mysql://localhost:3306/<nombre_db>
+
 spring.datasource.username=<usuario>
+
 spring.datasource.password=<contraseña>
+
 spring.jpa.hibernate.ddl-auto=update
 
 **Ejecutar el proyecto**
