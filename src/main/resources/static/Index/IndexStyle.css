@@ -1,0 +1,91 @@
+body {
+    background: linear-gradient(145deg, #0F0D0D, #1a1a1a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: fadeInBody 1s ease-out;
+}
+
+.login-container {
+    background-color: #1a1a1a;
+    padding: 2.3rem;
+    border-radius: 14px;
+    width: 360px;
+    box-shadow: 
+        0 0 12px rgba(100, 142, 207, 0.15),
+        0 0 25px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(2px);
+    animation: zoomIn 0.35s ease;
+}
+
+.login-title {
+    color: #FFFFFF;
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+}
+
+.select-button {
+    padding: 0.9rem;
+    background-color: #648ECF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.25s ease-in-out;
+    box-shadow: 0 0 6px rgba(100, 142, 207, 0.4);
+}
+
+.select-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 0 10px rgba(100, 142, 207, 0.6),
+        0 0 20px rgba(100, 142, 207, 0.4);
+}
+
+.usuario {
+    background: linear-gradient(145deg, #4A90E2, #357cc9);
+}
+
+.usuario:hover {
+    background: linear-gradient(145deg, #5aa0f7, #3d88d4);
+}
+
+.gestor {
+    background: linear-gradient(145deg, #7E57C2, #6744a3);
+}
+
+.gestor:hover {
+    background: linear-gradient(145deg, #8f6ed3, #7550b5);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInBody {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 400px) {
+    .login-container {
+        width: 90%;
+        padding: 1.8rem;
+    }
+}

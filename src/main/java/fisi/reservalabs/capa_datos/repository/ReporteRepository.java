@@ -1,5 +1,8 @@
 package fisi.reservalabs.capa_datos.repository;
 
-public class ReporteRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import fisi.reservalabs.capa_datos.model.Reporte;
+
+public interface ReporteRepository extends JpaRepository<Reporte, String> {
 
 }
