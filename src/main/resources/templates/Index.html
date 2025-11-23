@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegir tipo de usuario</title>
+    <link rel="stylesheet" th:href="@{/Index/IndexStyle.css}">
+</head>
+<body>
+
+    <div class="login-container">
+        <h2 class="login-title">Inicie sesión como...</h2>
+
+        <div class="button-group">
+            <button class="select-button usuario" th:onclick="|location.href='@{/loginUsuario}'|">Usuario</button>
+            <button class="select-button gestor" th:onclick="|location.href='@{/loginGestor}'|">Gestor</button>
+        </div>
+    </div>
+
+</body>
+</html>
