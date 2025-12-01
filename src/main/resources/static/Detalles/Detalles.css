@@ -120,11 +120,6 @@ body {
     font-weight: 600;
 }
 
-.menu-left.active {
-    background: #ffffff33;
-    font-weight: 600;
-}
-
 .menu-item svg {
     width: 20px;
     height: 20px;
@@ -383,7 +378,7 @@ body {
     padding: 1.3rem;
     position: relative;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    max-width: 500px;
+    max-width: 650px;
 
 }
 
@@ -476,56 +471,70 @@ body {
     margin-left: 50px;
 }
 
-
-.submenu-btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.submenu {
-    display: none;
-    flex-direction: column;
-    margin-left: 40px;
-    margin-top: 5px;
-}
-
-.submenu-item {
-    padding: 8px 0;
-    font-size: 14px;
-    cursor: pointer;
-    color: #bbb;
-    position: relative;
-}
-
-.submenu-item:hover {
-    color: #fff;
-}
-
-.arrow {
-    transition: transform .25s ease;
-}
-
-.arrow.open {
-    transform: rotate(90deg);
-}
-
-.submenu.open {
-    display: block;
-}
-
-.submenu-btn {
-    padding: 12px 20px;      
+.status-row {
     display: flex;
     align-items: center;
-    gap: 12px;                 
-    cursor: pointer;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding-left: 0px;
 }
 
-.submenu-btn .menu-text {
-    padding-left: 4px; 
+.status-label {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-row .status-badge {
     position: relative;
-    top: -4px;
-    
+    margin: 0;
+    top: 0;
+    left: 0;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end; /* A la derecha */
+    gap: 20px; /* SeparaciĂłn de 20px */
+    margin-top: 20px;
+    padding-right: 20px;
+}
+
+.btn-cancel,
+.btn-reassign {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    color: white;
+    transition: background 0.2s ease;
+}
+
+.btn-cancel {
+    background-color: #d9534f;
+}
+.btn-cancel:hover {
+    background-color: #b52b27;
+}
+
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-reassign {
+    background-color: #4a78ff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.btn-reassign:hover {
+    background-color: #3a63d6;
 }

@@ -6,6 +6,7 @@ import fisi.reservalabs.capa_negocio.service.interfaces.ISolicitudService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,14 @@ public class SolicitudController {
         String idUsuario = ((fisi.reservalabs.capa_negocio.dto.UsuarioDTO) usuario).getIdUsuario();
 
         return solicitudService.listarSolicitudesPorUsuario(idUsuario);
+    }
+    
+    @PostMapping("/crear")
+    public ResponseEntity<SolicitudDTO> crearSolicitud(@RequestBody SolicitudDTO solicitudDTO, HttpSession session) {
+        // Llamar al servicio pasando tanto el DTO como la sesión
+        SolicitudDTO solicitudCreada = solicitudService.crearSolicitud(solicitudDTO, session);
+        
+        return ResponseEntity.ok(solicitudCreada);  // Devolver la solicitud creada como respuesta
     }
 
     @GetMapping("/reasignacion")

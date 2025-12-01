@@ -491,4 +491,20 @@ body {
     }
 }
 
+.btn-details {
+    background-color: #4a78ff;
+    color: white;
+    border: none;
+    width: 50%;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    margin-left: auto;
+    display: block;
+}
 
+.btn-details:hover {
+    background-color: #3a63d6;
+}

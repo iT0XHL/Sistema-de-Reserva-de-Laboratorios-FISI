@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de solicitud</title>
+    <link rel="stylesheet" th:href="@{/Detalles/Detalles.css}">
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div th:replace="fragments/sidebarUsuario :: sidebar-usuario"></div>
+
+<div class="top-bar">
+    <div class="top-bar-right">
+        <div class="user-dropdown">
+            <button class="user-info-button" id="userToggle">
+                <div class="user-avatar">U</div>
+                <span class="user-name" th:text="${nombre}">Usuario</span>
+            </button>
+
+            <div class="dropdown-menu" id="userMenu">
+                <button class="dropdown-item" th:data-link="@{/perfil}">Mi Perfil</button>
+                <button class="dropdown-item" id="logoutBtn">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div class="breadcrumb">
+        <a th:href="@{/principalUsuario}">Página Principal</a> >>
+        <a th:href="@{/solicitudes}">Mis solicitudes</a> >>
+        <span>Detalle de solicitud</span>
+    </div>
+
+    <h1 class="welcome-title">Solicitud</h1>
+
+    <div class="solicitud-card">
+
+        <!-- Estado -->
+        <div class="status-row">
+            <span class="status-label">Estado:</span>
+            <div class="status-badge"
+                th:classappend="${solicitud.estado == 'PENDIENTE'} ? ' pending' : ' completed'">
+                <span th:text="${solicitud.estado}">Pendiente</span>
+            </div>
+        </div>
+
+        <h3>Detalles:</h3>
+
+        <div class="solicitud-details">
+
+            <!-- Laboratorio -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9 20.25h6m-3-3v3m9-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Lab:
+                <span th:text="${solicitud.laboratorio != null ? solicitud.laboratorio.idLaboratorio : 'Por asignar'}"></span>
+            </div>
+
+            <!-- Fecha -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Fecha:
+                <span th:text="${#temporals.format(
+                    solicitud.fechaReserva.toInstant().atZone(T(java.time.ZoneId).of('America/Lima')).toLocalDate(),
+                    'd MMM yyyy')}">
+                </span>
+            </div>
+
+            <!-- Horas -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Hora:
+                <span th:text="${#temporals.format(solicitud.horaInicio.toLocalTime(), 'HH:mm')}"></span>
+                –
+                <span th:text="${#temporals.format(solicitud.horaFin.toLocalTime(), 'HH:mm')}"></span>
+            </div>
+
+        </div>
+
+        <!-- Reasignar boton -->
+        <div class="action-row">
+    <a class="btn-reassign"
+       th:href="@{/solicitudes/reasignar(id=${solicitud.idSolicitud},fecha=${solicitud.fechaSolicitud})}">
+        Reasignar
+    </a>
+</div>
+
+
+    </div>
+</div>
+
+<script th:src="@{/Detalles/Detalles.js}"></script>
+</body>
+</html>

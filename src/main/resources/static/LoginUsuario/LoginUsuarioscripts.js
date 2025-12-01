@@ -29,11 +29,12 @@ window.onclick = function(event) {
 // FUNCIÓN PRINCIPAL DE LOGIN
 // -------------------------------
 
+// Función de login
 function login() {
     const usuario = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Validación vacíos
+    // Validación de vacíos
     if (usuario === '' || password === '') {
         showModal("Por favor ingrese usuario y contraseña");
         return;
@@ -59,6 +60,17 @@ function login() {
     .then(data => {
         console.log("Login exitoso:", data);
 
+        // Guardar el usuario en localStorage
+        const usuarioData = {
+            idUsuario: data.idUsuario,  // Guardamos el idUsuario
+            usuario: data.usuario,
+            nombre: data.nombre,
+            correo: data.correo,
+            telefono: data.telefono,
+            rol: data.rol
+        };
+        localStorage.setItem('usuario', JSON.stringify(usuarioData)); // Guarda el usuario en localStorage
+
         // Redirigir a la página principal del usuario
         window.location.href = '/principalUsuario';
     })
@@ -67,6 +79,7 @@ function login() {
         showModal("Usuario o contraseña incorrectos");
     });
 }
+
 
 // -------------------------------
 // MOSTRAR / OCULTAR CONTRASEÑA

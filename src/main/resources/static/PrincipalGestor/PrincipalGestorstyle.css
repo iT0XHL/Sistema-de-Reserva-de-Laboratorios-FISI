@@ -524,7 +524,7 @@ body {
 }
 
 .submenu.open {
-    display: flex;
+    display: block;
 }
 
 .submenu-btn {

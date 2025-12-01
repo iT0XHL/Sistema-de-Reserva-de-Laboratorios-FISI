@@ -1,6 +1,7 @@
 package fisi.reservalabs.capa_negocio.service.interfaces;
 
 import fisi.reservalabs.capa_negocio.dto.SolicitudDTO;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ISolicitudService {
 
     SolicitudDTO obtenerPorId(String idSolicitud, Date fechaSolicitud);
 
-    SolicitudDTO crearSolicitud(SolicitudDTO dto);
+    SolicitudDTO crearSolicitud(SolicitudDTO dto, HttpSession session);
 
     SolicitudDTO actualizarSolicitud(String idSolicitud, Date fechaSolicitud, SolicitudDTO dto);
 

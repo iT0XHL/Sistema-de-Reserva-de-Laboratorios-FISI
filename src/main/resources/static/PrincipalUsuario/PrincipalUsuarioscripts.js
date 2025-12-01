@@ -16,25 +16,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5"/></svg>';
         }
     });
-});
 
-// Sidebar navigation
-document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const destino = item.getAttribute('data-link');
-        if (destino) {
-            window.location.href = destino;
-        }
+    // Sidebar navigation  ✅ AHORA DENTRO DE DOMContentLoaded
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const destino = item.getAttribute('data-link');
+            if (destino) {
+                window.location.href = destino;
+            }
+        });
     });
-});
 
-// Access buttons
-document.querySelectorAll('.access-button').forEach(item => {
-    item.addEventListener('click', () => {
-        const destino = item.getAttribute('data-link');
-        if (destino) {
-            window.location.href = destino;
-        }
+    // Access buttons  ✅ AHORA DENTRO DE DOMContentLoaded
+    document.querySelectorAll('.access-button').forEach(item => {
+        item.addEventListener('click', () => {
+            const destino = item.getAttribute('data-link');
+            if (destino) {
+                window.location.href = destino;
+            }
+        });
+    });
+
+    document.querySelectorAll(".btn-details").forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            const id = this.getAttribute("data-id");
+            const fecha = this.getAttribute("data-fecha");
+
+            if (!id || !fecha) {
+                console.error("Error: id o fecha vacíos:", id, fecha);
+                return;
+            }
+
+            // Redirige usando tu endpoint real
+            window.location.href = `/solicitudes/detalle?id=${id}&fecha=${fecha}`;
+        });
     });
 });
 

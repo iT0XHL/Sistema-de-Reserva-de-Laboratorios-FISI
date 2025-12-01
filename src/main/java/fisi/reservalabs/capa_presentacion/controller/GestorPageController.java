@@ -39,7 +39,8 @@ public class GestorPageController {
         model.addAttribute("empleado", empleado);
          model.addAttribute("correoGestor", empleado.getCorreo());
          model.addAttribute("nombreGestor", empleado.getNombreCompleto());
-        return "PrincipalGestor";
+        model.addAttribute("seccionActual", "principal");
+         return "PrincipalGestor";
     }
 
     @GetMapping("/pendientes")
@@ -56,7 +57,7 @@ public class GestorPageController {
         model.addAttribute("solicitudesPendientes", solicitudesPendientes);
         model.addAttribute("nombreGestor", empleado.getNombreCompleto());
         model.addAttribute("correoGestor", empleado.getCorreo());
-
+        model.addAttribute("seccionActual", "solicitudes");
         return "Pendientes"; // nombre del html
     }
 
@@ -82,7 +83,7 @@ public class GestorPageController {
         model.addAttribute("solicitudesReasignacion", solicitudesReasignacion);
         model.addAttribute("nombreGestor", empleado.getNombreCompleto());
         model.addAttribute("correoGestor", empleado.getCorreo());
-
+        model.addAttribute("seccionActual", "solicitudes");
         return "Reasignacion"; // Reasignacion.html
     }
 
@@ -95,7 +96,7 @@ public class GestorPageController {
 
         model.addAttribute("nombreGestor", empleado.getNombreCompleto());
         model.addAttribute("correoGestor", empleado.getCorreo());
-
+        model.addAttribute("seccionActual", "laboratorio");
         return "Laboratorio";  // Laboratorio.html
     }
 

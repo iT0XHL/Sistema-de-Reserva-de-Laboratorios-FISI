@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================
     // 1. Navegación del menú lateral
     // =============================
-    document.querySelectorAll('.menu-item').forEach(item => {
+    document.querySelectorAll('.menu-item[data-link]').forEach(item => {
         item.addEventListener('click', () => {
             const destino = item.getAttribute('data-link');
             if (destino) window.location.href = destino;
@@ -30,57 +30,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cerrar sesión
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if (confirm('¿Seguro que deseas cerrar sesión?')) {
-                window.location.href = '/loginGestor'; 
+                window.location.href = '/loginGestor';
             }
         });
     }
 
     // =============================
-    // 3. Submenú 
+    // 3. Submenú "Solicitudes" con estado persistente
     // =============================
-    const submenuBtn = document.querySelector(".submenu-btn");
-    const submenu = document.querySelector(".submenu");
-    const arrow = document.querySelector(".arrow");
+    const submenuBtn = document.querySelector('.submenu-btn');
+    const submenu    = document.querySelector('.submenu');
+    const arrow      = document.querySelector('.arrow');
+
+    const SUBMENU_KEY = 'gestor_submenu_open';
+    let isSubmenuOpen = localStorage.getItem(SUBMENU_KEY) === 'true';
+
+    // Restaurar estado guardado
+    if (submenu && arrow && isSubmenuOpen) {
+        submenu.classList.add('open');
+        arrow.classList.add('open');
+    }
 
     if (submenuBtn && submenu && arrow) {
-        submenuBtn.addEventListener("click", (e) => {
+        submenuBtn.addEventListener('click', e => {
             e.stopPropagation();
+            submenu.classList.toggle('open');
+            arrow.classList.toggle('open');
 
-            if (document.getElementById("sidebar").classList.contains("collapsed")) return;
-
-            submenu.classList.toggle("open");
-            arrow.classList.toggle("open");
+            // guardar estado actual
+            isSubmenuOpen = submenu.classList.contains('open');
+            localStorage.setItem(SUBMENU_KEY, isSubmenuOpen);
         });
     }
 
-    // Click sobre elementos del submenú
-    document.querySelectorAll(".submenu-item").forEach(item => {
-        item.addEventListener("click", () => {
-            const link = item.getAttribute("data-link");
+    // Click en las opciones del submenú
+    document.querySelectorAll('.submenu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const link = item.getAttribute('data-link');
             if (link) window.location.href = link;
         });
     });
 
-    // Access buttons
+    // =============================
+    // 4. Botones de accesos directos
+    // =============================
     document.querySelectorAll('.access-button').forEach(item => {
         item.addEventListener('click', () => {
             const destino = item.getAttribute('data-link');
-            if (destino) {
-                window.location.href = destino;
-            }
+            if (destino) window.location.href = destino;
         });
     });
 
     // =============================
-    // 4. Colapsar menú lateral
+    // 5. Colapsar menú lateral
     // =============================
-    const sidebar = document.getElementById('sidebar');
+    const sidebar    = document.getElementById('sidebar');
     const collapseBtn = document.getElementById('collapseBtn');
-    let isCollapsed = false;
+    let isCollapsed  = false;
 
     if (collapseBtn && sidebar) {
         collapseBtn.addEventListener('click', () => {
@@ -93,18 +102,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>`
                 : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" /></svg>`;
 
-            // Submenú cuando se colapsa
+            // Al colapsar, solo ocultamos visualmente el submenú,
+            // pero NO cambiamos isSubmenuOpen ni lo borramos del localStorage
             if (isCollapsed) {
-                if (submenu) submenu.classList.remove("open");
-                if (submenu) submenu.style.display = "none";
-                if (arrow) {
-                    arrow.classList.remove("open");
-                    arrow.style.display = "none";
-                }
+                if (submenu) submenu.classList.remove('open');
+                if (arrow)   arrow.classList.remove('open');
             } else {
-                // Restaurar visual
-                if (submenu) submenu.style.display = "";
-                if (arrow) arrow.style.display = "";
+                // Si estaba abierto antes de colapsar, lo volvemos a mostrar
+                if (submenu && isSubmenuOpen) submenu.classList.add('open');
+                if (arrow && isSubmenuOpen)   arrow.classList.add('open');
             }
         });
     }

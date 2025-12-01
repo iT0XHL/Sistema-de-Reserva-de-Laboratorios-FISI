@@ -19,6 +19,7 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, SolicitudI
     List<Solicitud> findByEmpleado_IdEmpleadoAndTipo(String idEmpleado, String tipo);
     List<Solicitud> findByEmpleado_IdEmpleadoAndEstadoAndLaboratorioIsNull(String idEmpleado, String estado);
 
-
+    @Query("SELECT s.idSolicitud FROM Solicitud s ORDER BY s.idSolicitud DESC")
+    List<String> getLastId();
 }
 
