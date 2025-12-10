@@ -23,6 +23,7 @@ public class SolicitudDTO {
     private Date horaFin;
     private String motivo;
     private String tipo;
+    private String requerimientos;
 
     public SolicitudDTO(Solicitud solicitud) {
         this.idSolicitud = solicitud.getIdSolicitud();
@@ -36,5 +37,6 @@ public class SolicitudDTO {
         this.horaFin = solicitud.getHoraFin();
         this.motivo = solicitud.getMotivo();
         this.tipo = solicitud.getTipo();
+        this.requerimientos = solicitud.getRequerimientos();
     }
 }

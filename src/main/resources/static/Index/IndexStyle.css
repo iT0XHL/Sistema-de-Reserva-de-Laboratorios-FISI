@@ -47,30 +47,30 @@ body {
     cursor: pointer;
     font-weight: 500;
     transition: 0.25s ease-in-out;
-    box-shadow: 0 0 6px rgba(100, 142, 207, 0.4);
-}
-
-.select-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-        0 0 10px rgba(100, 142, 207, 0.6),
-        0 0 20px rgba(100, 142, 207, 0.4);
 }
 
 .usuario {
     background: linear-gradient(145deg, #4A90E2, #357cc9);
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.6);
 }
 
 .usuario:hover {
     background: linear-gradient(145deg, #5aa0f7, #3d88d4);
+    box-shadow:
+        0 0 10px #4a90e2cc,
+        0 0 20px #357cc999;
 }
 
 .gestor {
     background: linear-gradient(145deg, #7E57C2, #6744a3);
+    box-shadow: 0 0 6px #7e57c299;
 }
 
 .gestor:hover {
     background: linear-gradient(145deg, #8f6ed3, #7550b5);
+    box-shadow:
+        0 0 10px #7e57c2cc,
+        0 0 20px #6744a399;
 }
 
 @keyframes zoomIn {

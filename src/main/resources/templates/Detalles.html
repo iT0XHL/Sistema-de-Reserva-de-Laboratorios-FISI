@@ -17,7 +17,10 @@
     <div class="top-bar-right">
         <div class="user-dropdown">
             <button class="user-info-button" id="userToggle">
-                <div class="user-avatar">U</div>
+                <div class="user-avatar"
+                     th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+                    U
+                </div>
                 <span class="user-name" th:text="${nombre}">Usuario</span>
             </button>
 
@@ -37,7 +40,7 @@
         <span>Detalle de solicitud</span>
     </div>
 
-    <h1 class="welcome-title">Solicitud</h1>
+    <h1 class="welcome-title">Detalles de solicitud</h1>
 
     <div class="solicitud-card">
 
@@ -45,7 +48,7 @@
         <div class="status-row">
             <span class="status-label">Estado:</span>
             <div class="status-badge"
-                th:classappend="${solicitud.estado == 'PENDIENTE'} ? ' pending' : ' completed'">
+                 th:classappend="${solicitud.estado == 'PENDIENTE'} ? ' pending' : ' completed'">
                 <span th:text="${solicitud.estado}">Pendiente</span>
             </div>
         </div>
@@ -54,12 +57,39 @@
 
         <div class="solicitud-details">
 
+            <!-- Tipo de solicitud -->
+            <div class="detail-item">
+                <!-- Icono para ASIGNACIÓN -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                     th:if="${solicitud.tipo == 'ASIGNACION'}" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9 12h6m-3-3v6m-6 7.5h12A2.25 2.25 0 0020.25 20V7.5
+                             L15 2.25H6A2.25 2.25 0 003.75 4.5v15A2.25 2.25 0 006 21z" />
+                </svg>
+
+                <!-- Icono para REASIGNACIÓN -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                     th:if="${solicitud.tipo == 'REASIGNACION'}" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M4.5 4.5v6h6M19.5 19.5v-6h-6M5.25 19.5A8.25 8.25 0 0 0 18 9.75h1.5M6 14.25A8.25 8.25 0 0 1 18.75 4.5H17.25" />
+                </svg>
+
+                Tipo de solicitud:
+                <span id="tipoSolicitudText"
+                      th:text="${solicitud.tipo == 'REASIGNACION' ? 'Reasignación' : 'Asignación'}">
+                    Asignación
+                </span>
+            </div>
+
             <!-- Laboratorio -->
             <div class="detail-item">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                     stroke-width="1.5" stroke="currentColor" class="size-6 icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M9 20.25h6m-3-3v3m9-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
                 </svg>
                 Lab:
                 <span th:text="${solicitud.laboratorio != null ? solicitud.laboratorio.idLaboratorio : 'Por asignar'}"></span>
@@ -92,17 +122,41 @@
                 <span th:text="${#temporals.format(solicitud.horaFin.toLocalTime(), 'HH:mm')}"></span>
             </div>
 
+            <!-- Requerimientos -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="size-6 icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                </svg>
+                Requerimientos:
+                <span id="reqText"
+                      th:text="${solicitud.requerimientos != null ? solicitud.requerimientos : 'Sin requerimientos'}">
+                    Sin requerimientos
+                </span>
+            </div>
+
         </div>
 
-        <!-- Reasignar boton -->
+        <!-- Botones -->
         <div class="action-row">
-    <a class="btn-reassign"
-       th:href="@{/solicitudes/reasignar(id=${solicitud.idSolicitud},fecha=${solicitud.fechaSolicitud})}">
-        Reasignar
-    </a>
-</div>
+            <a href="javascript:history.back()" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Regresar
+            </a>
 
-
+            <a class="btn-reassign"
+               th:href="@{/solicitudes/reasignar(
+                            id=${solicitud.idSolicitud},
+                            fecha=${#dates.format(solicitud.fechaSolicitud,'yyyy-MM-dd HH:mm:ss.S')}
+                        )}">
+                Reasignar
+            </a>
+        </div>
     </div>
 </div>
 

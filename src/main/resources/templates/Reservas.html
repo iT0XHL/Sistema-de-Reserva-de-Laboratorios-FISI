@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas</title>
+    <link rel="stylesheet" th:href="@{/Reservas/Reservasstyles.css}">
+</head>
+<body>
+    <!-- Sidebar reutilizable -->
+    <div th:replace="fragments/sidebarUsuario :: sidebar-usuario"></div>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="user-dropdown">
+                <button class="user-info-button" id="userToggle">
+    <div class="user-avatar"
+         th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+        U
+    </div>
+    <span class="user-name" th:text="${nombre}">Usuario</span>
+</button>
+
+                <div class="dropdown-menu" id="userMenu">
+                    <button class="dropdown-item" th:data-link="@{/perfil}">
+                    Mi Perfil
+                </button>
+                    <button class="dropdown-item" id="logoutBtn">
+                        Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a th:href="@{/principalUsuario}">Página Principal</a> >>
+            <span>Mis Reservas</span>
+        </div>
+        <h1 class="welcome-title">Mis Reservas</h1>
+
+        <div id="solicitudesContainer" class="solicitudes-container">
+        </div>
+    </div>
+
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+
+    <script th:src="@{/Reservas/Reservasscripts.js}"></script>
+</body>
+</html>

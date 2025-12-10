@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Reasignación</title>
+    <link rel="stylesheet" th:href="@{/SoliReasignar/SoliReasignar2styles.css}">
+</head>
+<body>
+
+    <!-- Sidebar reutilizable -->
+    <div th:replace="fragments/sidebarUsuario :: sidebar-usuario"></div>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="user-dropdown">
+                <button class="user-info-button" id="userToggle">
+    <div class="user-avatar"
+                     th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+                    U
+                </div>
+    <span class="user-name" th:text="${nombre}">Usuario</span>
+</button>
+
+                <div class="dropdown-menu" id="userMenu">
+                <button class="dropdown-item" th:data-link="@{/perfil}">Mi Perfil</button>
+                <button class="dropdown-item" id="logoutBtn">Salir</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a th:href="@{/principalUsuario}">Página Principal</a> >>
+            <a th:href="@{/solicitudes}">Mis Solicitudes</a> >>
+<a href="#"
+       class="btn-details"
+       th:data-id="${solicitud.idSolicitud}"
+       th:data-fecha="${#dates.format(
+           solicitud.fechaSolicitud,
+           'yyyy-MM-dd''T''HH:mm:ssXXX'
+       )}">
+        Detalle de solicitud
+    </a> >>
+    <span>Reasignar Reserva</span>
+        </div>
+        <h1 class="welcome-title">Solicitud de Reasignación</h1>
+
+        <div class="reservation-form">
+            <div class="form-group">
+                <label for="datePicker">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Fecha: <span id="selectedDateDisplay">5 oct 2025</span>
+                    <button type="button" id="editDateBtn" class="edit-date-btn">Editar</button>
+                </label>
+                <input type="hidden" id="selectedDate" value="2025-10-05">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Ingrese el horario:
+                </label>
+                <div class="time-inputs">
+                    <div class="time-select">
+                        <label for="startTime">Hora de inicio:</label>
+                        <select id="startTime" required>
+                            <option value="">Inicio</option>
+                            <option value="08:00">08:00</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                        </select>
+                    </div>
+                    <div class="time-select">
+                        <label for="endTime">Hora de fin:</label>
+                        <select id="endTime" required>
+                            <option value="">Fin</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                            <option value="20:00">20:00</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="labCount">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                    </svg>
+                    Cantidad de laboratorios:
+                </label>
+                <input type="number" id="labCount" min="1" max="10" placeholder="Cantidad" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requirements">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#D9D9D9">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Requerimientos nuevos:
+                </label>
+                <textarea id="requirements" rows="4" placeholder="Escriba los nuevos requerimientos entre ',' cada uno..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel">Cancelar solicitud</button>
+                <button type="submit" class="btn-submit">Enviar solicitud</button>
+            </div>
+    </div>
+<div class="modal-overlay" id="cancelConfirmModal">
+    <div class="modal-content warning-modal">
+        <h3>¿Cancelar la solicitud?</h3>
+        <p>Si cancelas, se perderán los datos ingresados.</p>
+
+        <div class="modal-buttons">
+            <button type="button" id="cancelStayBtn" class="btn-cancel">
+                No
+            </button>
+            <button type="button" id="cancelGoBtn" class="btn-submit">
+                Sí
+            </button>
+        </div>
+    </div>
+</div>
+
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal-content">
+            <h3>¿Los datos son correctos?</h3>
+        
+            <div class="modal-data">
+                <p><strong>Fecha:</strong> <span id="modalDate">5 oct 2025</span></p>
+                <p><strong>Inicio:</strong> <span id="modalStart">10 am</span> &nbsp;&nbsp; <strong>Fin:</strong> <span id="modalEnd">12 pm</span></p>
+                <p><strong>Cantidad:</strong> <span id="modalCount">1</span></p>
+                <p><strong>Requerimientos:</strong> <span id="modalRequirements">CodeBlocks</span></p>
+            </div>
+
+            <p>¿Desea confirmar su solicitud?</p>
+
+            <div class="modal-buttons">
+                <button type="button" id="modalCancelBtn" class="btn-cancel">Cancelar</button>
+                <button type="button" id="modalConfirmBtn" class="btn-submit">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content success-modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#4CAF50" viewBox="0 0 24 24" style="margin-bottom: 1rem;">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            <h3>¡Solicitud enviada!</h3>
+            <div class="modal-buttons">
+                <button type="button" id="makeAnotherBtn" class="btn-submit">Hacer otra reserva</button>
+                <button type="button" id="acceptBtn" class="btn-submit">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="errorModal">
+        <div class="modal-content error-modal">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <h3>¡Datos inválidos!</h3>
+            <div class="modal-buttons">
+                <button type="button" id="regresarBtn" class="btn-cancel">Regresar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+    
+    <script th:src="@{/SoliReasignar/SoliReasignar2scripts.js}"></script>
+</body>
+</html>

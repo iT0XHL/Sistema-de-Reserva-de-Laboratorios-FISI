@@ -2,6 +2,7 @@ package fisi.reservalabs.capa_datos.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.Date;
 
 @Entity
@@ -54,4 +55,8 @@ public class Solicitud {
 
     @Column(name = "tipo", length = 50)
     private String tipo;
+
+    @Column(name = "requerimientos", columnDefinition = "json")
+    private String requerimientos;
+
 }

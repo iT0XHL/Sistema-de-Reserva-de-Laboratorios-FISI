@@ -24,6 +24,7 @@ public class SolicitudMapper {
         dto.setHoraFin(entity.getHoraFin());
         dto.setMotivo(entity.getMotivo());
         dto.setTipo(entity.getTipo());
+        dto.setRequerimientos(entity.getRequerimientos());
 
         return dto;
     }
@@ -47,6 +48,7 @@ public class SolicitudMapper {
         entity.setHoraFin(dto.getHoraFin());
         entity.setMotivo(dto.getMotivo());
         entity.setTipo(dto.getTipo());
+        entity.setRequerimientos(dto.getRequerimientos());
 
         return entity;
     }

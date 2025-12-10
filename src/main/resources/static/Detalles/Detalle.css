@@ -1,0 +1,692 @@
+/* =========================================
+  BASE
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0F0D0D;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================
+   SIDEBAR 
+========================================= */
+
+.sidebar {
+    width: 260px;
+    background: #151319;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px 0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 0 15px #0000001a;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #ffffff1a;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar.collapsed .sidebar-header {
+    padding: 0;
+    justify-content: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.sidebar.collapsed .logo-container {
+    justify-content: center;
+    gap: 0;
+}
+
+.logo-circle {
+    width: 40px;
+    height: 40px;
+    background: #E5E5E5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.sidebar.collapsed .logo-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.logo-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.logo-subtitle {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: 0 15px;
+}
+
+.menu-item {
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+    background: #ffffff1a;
+}
+
+.menu-item.active,
+.menu-left.active {
+    background: #ffffff33;
+    font-weight: 600;
+}
+
+.menu-item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.menu-text {
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.sidebar.collapsed .menu-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.collapse-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background: #151319;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px #0000001a;
+}
+
+.submenu-btn {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 12px;
+}
+
+.submenu-btn .menu-text {
+    padding-left: 4px;
+    position: relative;
+    top: -4px;
+}
+
+.submenu {
+    display: none;
+    flex-direction: column;
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+.submenu.open {
+    display: block;
+}
+
+.submenu-item {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    color: #bbb;
+}
+
+.submenu-item:hover {
+    color: #fff;
+}
+
+.arrow {
+    transition: transform 0.25s ease;
+}
+
+.arrow.open {
+    transform: rotate(90deg);
+}
+
+#sidebar.collapsed .arrow {
+    display: none !important;
+}
+
+#sidebar.collapsed .menu-item,
+#sidebar.collapsed .submenu-btn,
+#sidebar.collapsed .submenu-item,
+#sidebar.collapsed .collapse-btn {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center !important;
+}
+
+#sidebar.collapsed span,
+#sidebar.collapsed .item-text {
+    display: none !important;
+}
+
+#sidebar.collapsed .submenu {
+    display: none !important;
+}
+
+/* =========================================
+   TOP BAR — (mantengo la última versión)
+========================================= */
+
+.top-bar {
+    background: #0D1A2E;
+    color: white;
+    padding: 0 30px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 260px;
+    right: 0;
+    z-index: 99;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    transition: left 0.3s ease;
+}
+
+.sidebar.collapsed ~ .top-bar {
+    left: 70px;
+}
+
+/* === avatar, dropdown y user button (última versión del archivo) === */
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    padding-right: 30px;
+    gap: 20px;
+}
+
+/* Botón usuario */
+.user-info-button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.user-info-button:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* Avatar */
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #0d9488, #10b981);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+}
+
+/* Nombre */
+.user-name {
+    color: white;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Dropdown contenedor */
+.user-dropdown {
+    position: relative;
+}
+
+/* Dropdown menú */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #232127;
+    border-radius: 10px;
+    padding: 8px 0;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    transition: 0.25s ease;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Items */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    width: 100%;
+    border: none;
+    background: none;
+    color: #ddd;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255,255,255,0.08);
+}
+
+.dropdown-item svg {
+    width: 20px;
+    height: 20px;
+    color: #9ca3af;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    margin-top: 70px;
+    padding: 30px;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed ~ .main-content {
+    margin-left: 70px;
+}
+
+.breadcrumb {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    margin-left: 50px;
+}
+
+.breadcrumb a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 15px;
+    margin-left: 50px;
+}
+
+/* =========================================
+   TARJETA DETALLE
+========================================= */
+
+.solicitud-card {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,255,255,0.05);
+    max-width: 650px;
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.solicitud-card h3 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.status-label {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+    background-color: rgba(158, 154, 154, 0.15);
+    color: #bbb;
+    border: 1px solid #444;
+}
+
+.solicitud-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #b0b0b0;
+    padding-left: 10px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #e0e0e0;
+}
+
+.detail-item svg {
+    width: 20px;
+    height: 20px;
+    color: #4A90E2;
+}
+
+/* =========================================
+   BOTONES Y ACCIONES (mantengo última versión)
+========================================= */
+
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-reject {
+    background: transparent;
+    border: 1px solid #4A90E2;
+    color: #4A90E2;
+    padding: 9px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-reject:hover {
+    background: rgba(74,144,226,0.1);
+    border-color: #5aa0f7;
+}
+
+
+.btn-accept {
+    background: linear-gradient(145deg, #4A90E2, #357cc9);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 0 6px #4a90e299;
+}
+
+.btn-accept:hover {
+    background: linear-gradient(145deg, #5aa0f7, #3d88d4);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+    .sidebar { width: 70px; }
+    .sidebar-header, .logo-text, .menu-text { opacity: 0; width: 0; overflow: hidden; }
+
+    .menu-item { justify-content: center; padding: 12px 0; gap: 0; }
+    .top-bar { left: 70px; }
+    .main-content { margin-left: 70px; }
+
+    .breadcrumb, .welcome-title, .solicitud-card {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-bar { padding: 0 15px; }
+    .user-name { display: none; }
+    .main-content { padding: 15px; }
+
+    .breadcrumb, .welcome-title, .solicitud-card { margin-left: 0; }
+
+    .btn-accept {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease-in-out;
+    z-index: 3000;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #e7dbdb;
+    border-radius: 14px;
+    padding: 35px 50px;
+    width: 520px;
+    text-align: center;
+
+    transform: scale(0.7);
+    opacity: 0;
+    transition: 0.25s ease-in-out;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-icon {
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    color: #000;
+    margin-bottom: 25px;
+}
+
+.modal-btn {
+    padding: 10px 26px;
+    background: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.modal-btn:hover {
+    background: #6aa8f3;
+}
+
+/* ========= MODAL RECHAZAR ============= */
+
+.modal-content.reject-modal {
+    background: #1f1f1f;
+    width: 650px;
+    padding: 35px 45px;
+    border-radius: 16px;
+    color: #fff;
+    text-align: left;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: 0.25s ease-in-out;
+}
+
+.modal-overlay.show .reject-modal {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.reject-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reject-text {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.reject-textarea {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    padding: 12px;
+    resize: none;
+    border: 1px solid #444;
+    background: #2b2b2b;
+    color: #fff;
+    outline: none;
+    font-size: 1rem;
+}
+
+.reject-textarea:focus {
+    border-color: #4A90E2;
+}
+
+.reject-actions {
+    margin-top: 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.reject-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.reject-btn.cancel {
+    background: #3a3a3a;
+    color: #ccc;
+}
+
+.reject-btn.cancel:hover {
+    background: #555;
+}
+
+.reject-btn.confirm {
+    background: #e53935;
+    color: white;
+}
+
+.reject-btn.confirm:hover {
+    background: #ff5a55;
+}
+
+.modal-overlay {
+    backdrop-filter: blur(4px);
+}

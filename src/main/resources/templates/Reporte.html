@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de solicitud</title>
+    <link rel="stylesheet" th:href="@{/Reporte/Reportestyles.css}">
+</head>
+<!-- TRANSICIÓN ENTRE PÁGINAS -->
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+<body th:attr="data-rol=${#strings.toUpperCase(#strings.trim(rol))}">
+
+    <div th:switch="${#strings.toUpperCase(#strings.trim(rol))}">
+        <div th:case="'GESTOR'">
+            <div th:replace="fragments/sidebarGestor :: sidebar-gestor"></div>
+        </div>
+        <div th:case="*">
+            <div th:replace="fragments/sidebarUsuario :: sidebar-usuario"></div>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="user-dropdown">
+                <button class="user-info-button" id="userToggle">
+                    <div class="user-avatar"
+                         th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+                        U
+                    </div>
+                    <span class="user-name" th:text="${nombre}">Usuario</span>
+                </button>
+
+                <div class="dropdown-menu" id="userMenu">
+                    <button class="dropdown-item"
+                            th:attr="data-link=${rol == 'Gestor'} ? '/gestor/perfil' : '/perfil'">
+                        Mi Perfil
+                    </button>
+                    <button class="dropdown-item" id="logoutBtn">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <div class="breadcrumb">
+            <a th:href="${rol == 'Gestor'} ? @{/principalGestor} : @{/principalUsuario}">
+                Página Principal
+            </a> >>
+            
+            <a th:href="${rol == 'Gestor'} ? @{/historial} : @{/solicitudes}"
+   th:text="${rol == 'Gestor'} ? 'Historial de solicitudes' : 'Mis solicitudes'">
+    Historial de solicitudes
+</a> >>
+
+            
+            <span>Ver Reporte</span>
+        </div>
+
+        <h1 class="welcome-title">Reporte de solicitud</h1>
+
+        <div class="solicitud-card">
+
+            <div class="status-row">
+                <span class="status-label">Estado:</span>
+                
+                <div class="status-badge"
+                     th:classappend="${solicitud.estado == 'PENDIENTE' ? 'pending' : (solicitud.estado == 'RECHAZADA' ? 'rejected' : 'accepted')}">
+                    <span th:text="${solicitud.estado}">Estado</span>
+                </div>
+            </div>
+
+            <h3>Detalles:</h3>
+
+            <div class="solicitud-details">
+
+                <div class="reporte-info">
+                    <div class="detail-item">
+                        Código de reporte:
+                        <span th:text="${reporte.idReporte}">R001</span>
+                    </div>
+
+                    <div class="detail-item">
+                        Tipo de reporte:
+                        <span th:text="${reporte.tipoReporte}">ASIGNACION</span>
+                    </div>
+
+                    <div class="detail-item">
+                        Fecha de emisión:
+                        <span th:text="${#dates.format(reporte.fechaEmision, 'dd/MM/yyyy')}">
+                            25/11/2024
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor" class="size-6 icon">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    Fecha:
+    <!-- ahora usamos la fecha de la solicitud que viene del REPORTE -->
+    <span th:text="${#dates.format(reporte.fechaSolicitud, 'dd/MM/yyyy')}"></span>
+</div>
+
+
+                <div class="detail-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke-width="1.5" stroke="currentColor" class="size-6 icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Hora:
+                    <span th:text="${#temporals.format(solicitud.horaInicio.toLocalTime(), 'HH:mm')}"></span>
+                    –
+                    <span th:text="${#temporals.format(solicitud.horaFin.toLocalTime(), 'HH:mm')}"></span>
+                </div>
+
+                <div class="detail-item" th:if="${solicitud.estado == 'RECHAZADA'}">
+                    Motivo de rechazo:
+                    <span th:text="${reporte.descripcion != null ? reporte.descripcion : 'Sin motivo especificado'}"></span>
+                </div>
+
+                <div class="detail-item" th:if="${rol == 'Gestor'}">
+                    Solicitante:
+                    <!-- usamos usuarioNombre que viene del modelo, no solicitud.usuario.nombre -->
+                    <span th:text="${usuarioNombre}">Nombre del Solicitante</span>
+                </div>
+
+            </div>
+
+            <div class="action-row">
+                <a href="javascript:history.back()" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Regresar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/Reporte/Reportescripts.js}"></script>
+</body>
+</html>

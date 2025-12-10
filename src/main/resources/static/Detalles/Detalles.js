@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==================================================================
     function initUserMenu() {
         const userToggle = document.getElementById("userToggle");
-        const userMenu = document.getElementById("userMenu");
-        const logoutBtn = document.getElementById("logoutBtn");
+        const userMenu   = document.getElementById("userMenu");
+        const logoutBtn  = document.getElementById("logoutBtn");
 
         if (!userToggle || !userMenu) {
             setTimeout(initUserMenu, 100);
@@ -60,10 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        // Logout → loginUsuario (es vista de usuario)
         if (logoutBtn) {
-            logoutBtn.addEventListener("click", function () {
+            logoutBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 if (confirm("¿Seguro que deseas cerrar sesión?")) {
-                    window.location.href = "/login";
+                    window.location.href = "/loginUsuario";
                 }
             });
         }
@@ -76,24 +79,64 @@ document.addEventListener("DOMContentLoaded", function () {
     // 3. BOTÓN REASIGNAR
     // ==================================================================
     document.addEventListener("click", function (e) {
-        if (e.target.classList.contains("btn-reassign")) {
-            const url = e.target.getAttribute("href");
-            if (url) window.location.href = url;
+        const btn = e.target.closest(".btn-reassign");
+        if (!btn) return;
+
+        e.preventDefault();
+        const url = btn.getAttribute("href");
+        if (url) window.location.href = url;
+    });
+
+
+    // ==================================================================
+    // 4. "Mi Perfil" desde el menú desplegable
+    // ==================================================================
+    document.querySelectorAll('.dropdown-item[data-link]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const destino = btn.getAttribute('data-link');
+            if (destino) {
+                window.location.href = destino; // /perfil en este caso
+            }
+        });
+    });
+
+
+    // ==================================================================
+    // 5. ACTIVAR NAVEGACIÓN DEL SIDEBAR (Delegación de Eventos)
+    // ==================================================================
+    document.addEventListener('click', function(e) {
+        const menuItem = e.target.closest('.menu-item[data-link]');
+        if (!menuItem) return;
+
+        const destino = menuItem.getAttribute('data-link');
+        if (destino) {
+            window.location.href = destino;
         }
     });
 
-    // ==============================
-// 4. ACTIVAR NAVEGACIÓN DEL SIDEBAR
-// ==============================
-document.querySelectorAll(".menu-item").forEach(item => {
-    item.style.cursor = "pointer";
 
-    item.addEventListener("click", () => {
-        const url = item.getAttribute("data-link");
-        if (url) {
-            window.location.href = url;
+    // ==================================================================
+    // 6. LIMPIAR FORMATO DE REQUERIMIENTOS (por si vienen como JSON)
+    // ==================================================================
+    const reqSpan = document.getElementById('reqText');
+    if (reqSpan) {
+        const raw = reqSpan.textContent.trim();
+
+        // Si parece un array JSON, ej: ["A","B","C"]
+        if (raw.startsWith('[') && raw.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    // lo mostramos como texto con comas
+                    reqSpan.textContent = parsed.join(', ');
+                }
+            } catch (err) {
+                console.error('No se pudo parsear requerimientos:', err);
+                // Si falla, lo dejamos tal cual
+            }
         }
-    });
-});
+    }
 
 });

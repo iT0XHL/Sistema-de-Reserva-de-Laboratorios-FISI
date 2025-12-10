@@ -1,3 +1,14 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const transitionContainer = document.getElementById('pageTransition');
+    
+    // Pequeño timeout para asegurar que el navegador renderice el estado inicial antes de animar
+    setTimeout(() => {
+        if (transitionContainer) {
+            transitionContainer.classList.add('slide-out');
+        }
+    }, 100);
+});
+
 // Sidebar collapse
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
@@ -55,26 +66,84 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// User dropdown
-document.addEventListener('DOMContentLoaded', function () {
+// ==============================
+    // MENÚ DE USUARIO
+    // ==============================
     const userToggle = document.getElementById('userToggle');
     const userMenu = document.getElementById('userMenu');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    userToggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        userMenu.classList.toggle('show');
-    });
+    if (userToggle && userMenu) {
+        userToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('show');
+        });
 
-    document.addEventListener('click', function (e) {
-        if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
-            userMenu.classList.remove('show');
+        document.addEventListener('click', function (e) {
+            if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+    }
+
+    // ==================================================================
+    // LOGOUT FUNCTIONALITY
+    // ==================================================================
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (confirm("¿Seguro que deseas cerrar sesión?")) {
+                window.location.href = "/loginUsuario";
+            }
+        });
+    }
+
+    // ==============================
+    // DROPDOWN ITEMS NAVIGATION
+    // ==============================
+    
+document.querySelectorAll('.dropdown-item[data-link]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const destino = btn.getAttribute('data-link');
+        if (destino) {
+            window.location.href = destino;
         }
     });
+});
+/* ==========================================
+   LÓGICA DE ESTADOS (COLORES E ÍCONOS)
+   ========================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    const statusBadges = document.querySelectorAll('.reservation-status');
 
-    logoutBtn.addEventListener('click', function () {
-        if (confirm('¿Seguro que deseas cerrar sesión?')) {
-            window.location.href = '/login';
+    statusBadges.forEach(badge => {
+        // 1. Obtenemos el texto (ej: "Aceptada", "Rechazada")
+        // Usamos trim() para quitar espacios y toLowerCase() para comparar fácil
+        const text = badge.textContent.trim().toLowerCase();
+        const iconSvg = badge.querySelector('svg path'); // Seleccionamos el trazo del ícono
+
+        // Limpiamos clases previas
+        badge.classList.remove('accepted', 'rejected', 'pending');
+
+        // 2. Aplicamos lógica
+        if (text.includes('aceptad')) {
+            // VERDE
+            badge.classList.add('accepted');
+            // Aseguramos que el ícono sea un check (✓)
+            if(iconSvg) iconSvg.setAttribute('d', 'm4.5 12.75 6 6 9-13.5');
+        } 
+        else if (text.includes('rechazad')) {
+            // ROJO
+            badge.classList.add('rejected');
+            // Cambiamos el ícono a una X
+            if(iconSvg) iconSvg.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        } 
+        else {
+            // AMARILLO (Por defecto o Pendiente)
+            badge.classList.add('pending');
+            // Ícono de reloj o interrogación (opcional, aquí dejo un reloj)
+            if(iconSvg) iconSvg.setAttribute('d', 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z');
         }
     });
 });

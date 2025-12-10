@@ -297,7 +297,7 @@ body {
 
 /* CALENDARIO */
 .calendar-card {
-    background: #232127;
+    background-color: #1a1a1a;
     border-radius: 35px;
     padding: 2rem;
     max-width: 1100px;
@@ -429,4 +429,49 @@ body {
     .day-header {
         font-size: 0.75rem;
     }
+}
+
+/*transición*/
+.transition-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.transition-bar {
+    flex: 1;
+    height: 100%;
+    background-color: #4A90E2;
+    
+    transform: translateY(0); 
+    
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.transition-bar:nth-child(2) {
+    background-color: #357cc9;
+}
+.transition-bar:nth-child(3) {
+    background-color: #1a1a1a;
+}
+
+/* CLASE PARA OCULTAR LAS BARRAS (ANIMACIÓN) */
+.transition-container.slide-out .transition-bar {
+    transform: translateY(-100%);
+}
+
+/* --- SECUENCIA (DELAY) --- */
+.transition-container.slide-out .transition-bar:nth-child(1) {
+    transition-delay: 0s;
+}
+.transition-container.slide-out .transition-bar:nth-child(2) {
+    transition-delay: 0.1s; 
+}
+.transition-container.slide-out .transition-bar:nth-child(3) {
+    transition-delay: 0.2s;
 }

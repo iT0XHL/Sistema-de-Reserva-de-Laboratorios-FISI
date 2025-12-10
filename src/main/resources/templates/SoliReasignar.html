@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Reasignación</title>
+    <link rel="stylesheet" th:href="@{/SoliReasignar/SoliReasignarstyles.css}">
+</head>
+<body>
+
+    <div th:replace="fragments/sidebarUsuario :: sidebar-usuario"></div>
+
+    <div class="top-bar">
+    <div class="top-bar-right">
+        <div class="user-dropdown">
+            <button class="user-info-button" id="userToggle">
+                <div class="user-avatar"
+                     th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+                    U
+                </div>
+                <span class="user-name" th:text="${nombre}">Usuario</span>
+            </button>
+
+            <div class="dropdown-menu" id="userMenu">
+                <button class="dropdown-item" th:data-link="@{/perfil}">Mi Perfil</button>
+                <button class="dropdown-item" id="logoutBtn">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a th:href="@{/principalUsuario}">Página Principal</a> >>
+            <a th:href="@{/solicitudes}">Mis Solicitudes</a> >>
+<a href="#"
+       class="btn-details"
+       th:data-id="${solicitud.idSolicitud}"
+       th:data-fecha="${#dates.format(
+           solicitud.fechaSolicitud,
+           'yyyy-MM-dd''T''HH:mm:ssXXX'
+       )}">
+        Detalle de solicitud
+    </a> >>            <span>Reasignar Reserva</span>
+        </div>
+
+        <h1 class="welcome-title">Solicitud de Reasignación</h1>
+
+        <input type="hidden" id="solicitudId" th:value="${idSolicitud}">
+
+        <div class="original-date-card">
+            <div class="original-date-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+            </div>
+            <div class="original-date-info">
+                <span class="odt-label">Fecha agendada actualmente:</span>
+                <span class="odt-value" 
+                      th:text="${#temporals.format(fechaOriginal, 'dd MMMM yyyy')}">
+                      -- Fecha Original --
+                </span>
+            </div>
+        </div>
+        <div class="section-title">Seleccione la NUEVA fecha:</div>
+        
+        <div class="calendar-container">
+            <div class="calendar-card">
+                <div class="calendar-nav">
+                    <button id="prevMonth" class="nav-btn"><</button>
+                    <h2 id="currentMonth">Octubre 2025</h2>
+                    <button id="nextMonth" class="nav-btn">></button>
+                </div>
+
+                <div class="calendar-grid" id="calendarGrid">
+                    <div class="day-header">Lunes</div>
+                    <div class="day-header">Martes</div>
+                    <div class="day-header">Miércoles</div>
+                    <div class="day-header">Jueves</div>
+                    <div class="day-header">Viernes</div>
+                    <div class="day-header">Sábado</div>
+                    <div class="day-header">Domingo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+
+    <script th:src="@{/SoliReasignar/SoliReasignarscripts.js}"></script>
+
+</body>
+</html>

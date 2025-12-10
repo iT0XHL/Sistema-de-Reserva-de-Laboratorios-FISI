@@ -16,7 +16,10 @@
     <div class="top-bar-right">
         <div class="user-dropdown">
             <button class="user-info-button" id="userToggle">
-                <div class="user-avatar">U</div>
+                <div class="user-avatar"
+                     th:text="${nombre != null and !#strings.isEmpty(nombre) ? #strings.toUpperCase(#strings.substring(nombre, 0, 1)) : 'U'}">
+                    U
+                </div>
                 <span class="user-name" th:text="${nombre}">Usuario</span>
             </button>
 
@@ -37,11 +40,11 @@
     <h1 class="welcome-title">Bienvenido, <span th:text="${nombre}">Usuario</span>!</h1>
 
     <div class="content-section">
-        <div class="section-title">Reservas actuales:</div>
+        <div class="section-title">Solicitudes actuales:</div>
 
         <div class="reservations-container">
 
-            <!-- ========= RESERVAS DINÁMICAS ========= -->
+            <!-- ========= SOLICITUDES DINÁMICAS ========= -->
             <div class="reservation-card"
                  th:each="solicitud, i : ${solicitudes}">
 
@@ -54,8 +57,9 @@
                     <span th:text="${solicitud.estado}">Aceptada</span>
                 </div>
 
+                <!-- TÍTULO: Solicitud + ID -->
                 <div class="reservation-title">
-                    Reserva #<span th:text="${i.index + 1}">1</span>
+                    Solicitud <span th:text="${solicitud.idSolicitud}">ID-001</span>
                 </div>
 
                 <div class="reservation-details">
@@ -68,7 +72,10 @@
                                      0 0 1-2.25 2.25H5.25A2.25 2.25 
                                      0 0 1 3 15V5.25" />
                         </svg>
-                        <span th:text="${solicitud.idLaboratorio}">Lab 1</span>
+                        <!-- Si no hay lab → "No asignado" -->
+                        <span th:text="${solicitud.idLaboratorio != null and !#strings.isEmpty(solicitud.idLaboratorio) ? solicitud.idLaboratorio : 'No asignado'}">
+                            No asignado
+                        </span>
                     </div>
 
                     <div class="detail-item">
@@ -99,12 +106,10 @@
                 </div>
 
                 <button class="btn-details"
-        th:data-id="${solicitud.idSolicitud}"
-        th:data-fecha="${#dates.format(solicitud.fechaSolicitud, 'yyyy-MM-dd''T''HH:mm:ssXXX')}"
->
-    Más detalles
-</button>
-
+                        th:data-id="${solicitud.idSolicitud}"
+                        th:data-fecha="${#dates.format(solicitud.fechaSolicitud, 'yyyy-MM-dd''T''HH:mm:ssXXX')}">
+                    Más detalles
+                </button>
 
             </div>
             <!-- ============================================================= -->
@@ -130,20 +135,14 @@
                 <div class="access-label">Reservar</div>
             </div>
 
-            <!-- BOTÓN REASIGNAR -->
-            <div class="access-button" th:data-link="@{/reasignar}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" fill="none"
-                     viewBox="0 0 24 24" stroke-width="1.5" stroke="#D9D9D9" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75
-                            6.75h.007v.008H3.75V6.75Zm.375 0a.375.375
-                            0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75
-                            12h.007v.008H3.75V12Zm.375 0a.375.375 0 1
-                            1-.75 0 .375.375 0 0 1 .75 0Zm-.375
-                            5.25h.007v.008H3.75v-.008Zm.375 0a.375.375
-                            0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            <!-- BOTÓN RESERVAS -->
+            <div class="access-button" th:data-link="@{/reservas}">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#D9D9D9" stroke-width="1.5">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 
+                    22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM12.75 6C12.75 5.58579 12.4142 5.25 12 5.25C11.5858 5.25 11.25 5.58579 11.25 6L11.25 12C11.25 12.4142 11.5858 
+                    12.75 12 12.75H18C18.4142 12.75 18.75 12.4142 18.75 12C18.75 11.5858 18.4142 11.25 18 11.25H12.75L12.75 6Z" fill="#D9D9D9"></path>
                 </svg>
-                <div class="access-label">Reasignar</div>
+                <div class="access-label">Reservas</div>
             </div>
 
             <!-- BOTÓN SOLICITUDES -->
@@ -162,6 +161,12 @@
         </div>
 
     </div>
+</div>
+
+<div class="transition-container" id="pageTransition">
+    <div class="transition-bar"></div>
+    <div class="transition-bar"></div>
+    <div class="transition-bar"></div>
 </div>
 
 <script th:src="@{/PrincipalUsuario/PrincipalUsuarioscripts.js}"></script>

@@ -1,3 +1,14 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const transitionContainer = document.getElementById('pageTransition');
+    
+    // Pequeño timeout para asegurar que el navegador renderice el estado inicial antes de animar
+    setTimeout(() => {
+        if (transitionContainer) {
+            transitionContainer.classList.add('slide-out');
+        }
+    }, 100);
+});
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // ==============================
@@ -68,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ==============================
-    // 3. MENÚ DE USUARIO
+    // MENÚ DE USUARIO
     // ==============================
     const userToggle = document.getElementById('userToggle');
     const userMenu = document.getElementById('userMenu');
@@ -87,10 +98,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ==================================================================
+    // LOGOUT FUNCTIONALITY
+    // ==================================================================
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-            if (confirm('¿Seguro que deseas cerrar sesión?')) {
-                window.location.href = '/login';
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (confirm("¿Seguro que deseas cerrar sesión?")) {
+                window.location.href = "/loginUsuario";
             }
         });
     }
@@ -131,39 +147,82 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelGoBtn = document.getElementById('cancelGoBtn');     // botón "Sí"
 
     function showError(message) {
-        console.error(message);
-        if (errorModal) errorModal.classList.add('show');
+    console.error(message);
+    if (errorModal) {
+        const msgEl = document.getElementById('errorMessage');
+        if (msgEl) {
+            msgEl.textContent = message;
+        }
+        errorModal.classList.add('show');
     }
+}
+document.querySelectorAll('.dropdown-item[data-link]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const destino = btn.getAttribute('data-link');
+        if (destino) {
+            window.location.href = destino;
+        }
+    });
+});
 
     // Abrir modal de confirmación de datos
     if (submitBtn) {
-        submitBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+    submitBtn.addEventListener('click', function (e) {
+        e.preventDefault();
 
-            const startVal = startTimeEl.value;
-            const endVal = endTimeEl.value;
-            const countVal = labCountEl.value;
-            const reqVal = reqEl.value || 'Sin requerimientos';
-            const dateText = selectedDateDisplay.textContent;
+        const startVal = startTimeEl.value;
+        const endVal = endTimeEl.value;
+        const countVal = labCountEl.value;
+        const reqVal = reqEl.value.trim();   // 👈 texto limpio
+        const dateText = selectedDateDisplay.textContent;
 
-            if (!startVal || !endVal || !countVal) {
-                showError('Complete todos los campos obligatorios.');
+        // Validaciones básicas
+        if (!startVal || !endVal || !countVal) {
+            showError('Complete todos los campos obligatorios.');
+            return;
+        }
+        if (startVal >= endVal) {
+            showError('La hora de inicio debe ser anterior a la hora de fin.');
+            return;
+        }
+
+        // 🔴 VALIDACIÓN DE REQUERIMIENTOS
+
+        // 1) Si el usuario escribió algo, validamos formato.
+        if (reqVal.length > 0) {
+
+            // No se permiten guiones como separador
+            if (reqVal.includes('-')) {
+                showError('Use comas para separar los requerimientos, no guiones.');
                 return;
             }
-            if (startVal >= endVal) {
-                showError('La hora de inicio debe ser anterior a la hora de fin.');
+
+            // Formato permitido:
+            //   "Item1"
+            //   "Item1, Item2"
+            //   "Item1,Item2, Item3"
+            const formatoRequerimientos = /^\s*[^,]+(\s*,\s*[^,]+)*\s*$/;
+
+            if (!formatoRequerimientos.test(reqVal)) {
+                showError('Formato inválido. Separe los requerimientos con comas. Ejemplo: "Python, MySQL, Oracle".');
                 return;
             }
+        }
 
-            modalDate.textContent = dateText;
-            modalStart.textContent = startVal;
-            modalEnd.textContent = endVal;
-            modalCount.textContent = countVal;
-            modalRequirements.textContent = reqVal;
+        // Si está vacío, lo mostramos como "Sin requerimientos" en el modal
+        const textoReq = reqVal.length > 0 ? reqVal : 'Sin requerimientos';
 
-            confirmationModal.classList.add('show');
-        });
-    }
+        // Llenar el modal de confirmación
+        modalDate.textContent = dateText;
+        modalStart.textContent = startVal;
+        modalEnd.textContent = endVal;
+        modalCount.textContent = countVal;
+        modalRequirements.textContent = textoReq;
+
+        confirmationModal.classList.add('show');
+    });
+}
+
 
     // Cerrar modal de confirmación con el botón "Cancelar"
     if (modalCancelBtn && confirmationModal) {
@@ -198,16 +257,23 @@ if (modalConfirmBtn && confirmationModal) {
             showError('El usuario no está autenticado.');
             return;
         }
+const reqRaw = reqEl.value.trim();
+
+const requisitosArray = reqRaw
+  ? reqRaw.split(',')
+      .map(r => r.trim())
+      .filter(r => r.length > 0)
+  : [];
 
         // Recopilar los datos del formulario
         const solicitudData = {
-            fechaReserva: fechaISO,                 // "2025-11-10"  -> OK para java.util.Date
-            horaInicio: horaInicioISO,             // "1970-01-01T08:00:00.000Z"
-            horaFin: horaFinISO,                   // "1970-01-01T10:00:00.000Z"
-            cantidadLaboratorios: modalCount.textContent,
-            requisitos: modalRequirements.textContent,
-            usuario: usuario.idUsuario
-        };
+    fechaReserva: fechaISO,
+    horaInicio: horaInicioISO,
+    horaFin: horaFinISO,
+    cantidadLaboratorios: modalCount.textContent,
+    requerimientos: JSON.stringify(requisitosArray), // 👈 si en Java usas String
+    usuario: usuario.idUsuario
+};
 
         // Enviar datos al backend usando fetch
         fetch('/api/solicitudes/crear', {

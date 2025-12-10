@@ -1,3 +1,6 @@
+/* =========================================
+   RESET Y ESTILOS BASE
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +14,9 @@ body {
     min-height: 100vh;
 }
 
-/*Sidebar*/
+/* =========================================
+   SIDEBAR
+   ========================================= */
 .sidebar {
     width: 260px;
     background: #151319;
@@ -153,6 +158,9 @@ body {
     box-shadow: 0 2px 10px #0000001a;
 }
 
+/* =========================================
+   TOP BAR
+   ========================================= */
 .top-bar {
     background: #0D1A2E;
     color: white;
@@ -274,6 +282,9 @@ body {
     white-space: nowrap;
 }
 
+/* =========================================
+   LAYOUT DE DETALLE
+   ========================================= */
 .main-content {
     flex: 1;
     margin-left: 260px;
@@ -285,67 +296,6 @@ body {
 
 .sidebar.collapsed ~ .main-content {
     margin-left: 70px;
-}
-
-.welcome-title {
-    font-size: 2.5rem;
-    color: #ffffff;
-    margin-bottom: 15px;
-    margin-left: 50px;
-}
-
-.content-section {
-    padding: 20px;
-    margin-left: 50px;
-}
-
-.section-title {
-    color: #ffffff;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 70px;
-    }
-
-    .sidebar-header {
-        padding: 0;
-        justify-content: center;
-    }
-
-    .logo-text,
-    .menu-text {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-    }
-
-    .menu-item {
-        justify-content: center;
-        padding: 12px 0;
-        gap: 0;
-    }
-
-    .top-bar {
-        left: 70px;
-    }
-
-    .main-content {
-        margin-left: 70px;
-    }
-}
-
-@media (max-width: 480px) {
-    .top-bar {
-        padding: 0 15px;
-    }
-
-    .user-name {
-        display: none;
-    }
 }
 
 .breadcrumb {
@@ -364,177 +314,207 @@ body {
     text-decoration: underline;
 }
 
-.solicitudes-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+.welcome-title {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 15px;
     margin-left: 50px;
-    margin-top: 1rem;
 }
 
+/* --- TARJETA PRINCIPAL (ESTILO GLASS/DARK) --- */
 .solicitud-card {
-    background-color: #232127;
-    border-radius: 10px;
-    padding: 1.3rem;
+    background-color: #1a1a1a; 
+    border-radius: 12px;
+    padding: 1.5rem;
     position: relative;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255,255,255,0.05); /* Borde sutil */
     max-width: 650px;
-
+    margin-left: 50px;
+    margin-top: 20px;
 }
 
 .solicitud-card h3 {
     color: #ffffff;
     font-size: 1.1rem;
-    margin-bottom: 0.3rem;
-    margin-top: 20px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
-.status-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.status-badge svg {
-    width: 12px;
-    height: 12px;
-}
-
-.status-badge.pending {
-    background-color: #56605754;
-    color: #9E9A9A;
-    margin-right: 23.8rem;
-}
-
-.status-badge.accepted {
-    background-color: #10b981;
-    color: white;
-}
-
-.solicitud-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #b0b0b0;
-    padding-top: 5px;
-}
-
-.detail-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: rgb(228, 216, 216);
-    padding-left: 30px;
-}
-
-.detail-item svg {
-    width: 14px;
-    height: 14px;
-    color: #aaa;
-}
-
-.btn-details {
-    display: flex;
-    background: #3c71c2;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    align-self: flex-end;
-    transition: background 0.2s ease;
-    font-weight: 600;
-    margin-left: auto;
-}
-
-.btn-details:hover {
-    background: #284878;
-}
-
-.no-solicitudes {
-    text-align: center;
-    color: #aaa;
-    font-size: 1.2rem;
-    padding: 2rem;
-    background-color: #232127;
-    border-radius: 10px;
-    max-width: 800px;
-    margin-left: 50px;
-}
-
+/* --- ESTADOS (ESTILO NEON/GLASS) --- */
 .status-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 15px;
-    padding-left: 0px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .status-label {
     color: #ffffff;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
-.status-row .status-badge {
-    position: relative;
-    margin: 0;
-    top: 0;
-    left: 0;
-}
-
-.action-buttons {
-    display: flex;
-    justify-content: flex-end; /* A la derecha */
-    gap: 20px; /* SeparaciĂłn de 20px */
-    margin-top: 20px;
-    padding-right: 20px;
-}
-
-.btn-cancel,
-.btn-reassign {
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.9rem;
+.status-badge {
+    /* Quitamos position absolute para que funcione en la fila */
+    position: relative; 
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
     font-weight: 600;
-    cursor: pointer;
-    border: none;
-    color: white;
-    transition: background 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.5px;
 }
 
-.btn-cancel {
-    background-color: #d9534f;
-}
-.btn-cancel:hover {
-    background-color: #b52b27;
+/* Caso 1: Pendiente (Gris) */
+.status-badge.pending {
+    background-color: rgba(158, 154, 154, 0.15);
+    color: #bbb;
+    border: 1px solid #444;
 }
 
+/* Caso 2: Completada/Aceptada (Verde Brillante) */
+/* Agregamos .completed porque es lo que usa tu HTML actual */
+.status-badge.accepted,
+.status-badge.completed {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #ACFFA8;
+    border: 1px solid #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+/* Caso 3: Rechazada (Rojo Brillante) */
+.status-badge.rejected {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.4); 
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.15);
+}
+
+/* --- DETALLES DE LA SOLICITUD --- */
+.solicitud-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #b0b0b0;
+    padding-left: 10px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #e0e0e0;
+}
+
+.detail-item svg {
+    width: 20px;
+    height: 20px;
+    color: #4A90E2; /* Iconos azules */
+}
+
+/* --- BOTÓN REASIGNAR (ESTILO GRADIENTE AZUL) --- */
 .action-row {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .btn-reassign {
-    background-color: #4a78ff;
+    background: linear-gradient(145deg, #4A90E2, #357cc9);
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.6);
     color: white;
-    padding: 10px 18px;
+    border: none;
+    padding: 10px 24px;
     border-radius: 6px;
-    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
     font-weight: 600;
+    text-decoration: none; /* Importante porque es un <a> */
     display: inline-block;
+    transition: all 0.25s ease-in-out;
 }
 
 .btn-reassign:hover {
-    background-color: #3a63d6;
+    background: linear-gradient(145deg, #5aa0f7, #3d88d4);
+    box-shadow: 
+        0 0 10px rgba(74, 144, 226, 0.8), 
+        0 0 20px rgba(53, 124, 201, 0.6);
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+    .sidebar { width: 70px; }
+    
+    .sidebar-header, .logo-text, .menu-text {
+        opacity: 0; width: 0; overflow: hidden;
+    }
+    
+    .menu-item { justify-content: center; padding: 12px 0; gap: 0; }
+    .top-bar { left: 70px; }
+    .main-content { margin-left: 70px; }
+    
+    .breadcrumb, .welcome-title, .solicitud-card {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-bar { padding: 0 15px; }
+    .user-name { display: none; }
+    .main-content { padding: 15px; }
+    
+    .breadcrumb, .welcome-title, .solicitud-card {
+        margin-left: 0;
+    }
+
+    .btn-reassign {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* --- BOTÓN REGRESAR (ESTILO SECUNDARIO) --- */
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px; /* Separación entre los botones */
+    margin-top: 30px;
+}
+
+.btn-back {
+    background-color: transparent;
+    border: 1px solid #4A90E2;
+    color: #4A90E2;
+    padding: 9px 20px; /* Un poco menos padding para equilibrar el borde */
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre flecha y texto */
+    transition: all 0.25s ease-in-out;
+}
+
+.btn-back svg {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-back:hover {
+    background-color: rgba(74, 144, 226, 0.1); /* Fondo azul muy suave */
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* Resplandor suave */
+    transform: translateY(-2px);
+    color: #5aa0f7;
+    border-color: #5aa0f7;
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de solicitudes</title>
+
+    <link rel="stylesheet" th:href="@{/Historial/Historialstyle.css}">
+</head>
+<body>
+
+    <!-- SIDEBAR REUTILIZABLE DEL GESTOR -->
+    <div th:replace="fragments/sidebarGestor :: sidebar-gestor"></div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="user-dropdown">
+                <button class="user-info-button" id="userToggle">
+                    <div class="user-avatar"
+                         th:text="${#strings.substring(nombreGestor,0,1)}">U</div>
+                    <span class="user-name" th:text="${nombreGestor}">Usuario</span>
+                </button>
+
+                <div class="dropdown-menu" id="userMenu">
+                    <button class="dropdown-item" th:data-link="@{/gestor/perfil}">
+                        Mi Perfil
+                    </button>
+                    <button class="dropdown-item" id="logoutBtn">
+                        Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a th:href="@{/principalGestor}">Página Principal</a> >>
+            <span>Historial de solicitudes</span>
+        </div>
+
+        <h1 class="welcome-title">Historial de Solicitudes</h1>
+
+        <!-- Contenedor que el JS llenará con las tarjetas -->
+        <div id="historialContainer" class="solicitudes-container">
+            <!-- El JS insertará aquí las solicitudes aceptadas / rechazadas -->
+        </div>
+    </div>
+
+    <!-- TRANSICIÓN ENTRE PÁGINAS -->
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+
+    <!-- JS de la página de historial -->
+    <script th:src="@{/Historial/Historialscripts.js}"></script>
+</body>
+</html>

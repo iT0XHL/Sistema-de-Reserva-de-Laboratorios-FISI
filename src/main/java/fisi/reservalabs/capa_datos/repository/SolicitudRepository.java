@@ -6,6 +6,7 @@ import fisi.reservalabs.capa_datos.model.SolicitudId;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SolicitudRepository extends JpaRepository<Solicitud, SolicitudId> {
@@ -13,13 +14,25 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, SolicitudI
     @Query("SELECT s FROM Solicitud s WHERE s.usuario.idUsuario = :idUsuario")
     List<Solicitud> findByUsuario(String idUsuario);
 
-    // CORRECTO para buscar solicitudes por empleado y estado
+    // Buscar solicitudes por empleado y estado
     List<Solicitud> findByEmpleado_IdEmpleadoAndEstado(String idEmpleado, String estado);
 
     List<Solicitud> findByEmpleado_IdEmpleadoAndTipo(String idEmpleado, String tipo);
+
     List<Solicitud> findByEmpleado_IdEmpleadoAndEstadoAndLaboratorioIsNull(String idEmpleado, String estado);
+
+    List<Solicitud> findByEstado(String estado);
+
+    List<Solicitud> findByEstadoAndLaboratorioIsNull(String estado);
+
+    List<Solicitud> findByEstadoAndLaboratorioIsNotNull(String estado);
 
     @Query("SELECT s.idSolicitud FROM Solicitud s ORDER BY s.idSolicitud DESC")
     List<String> getLastId();
+// Todas las solicitudes cuyo estado esté en la lista (ACEPTADA, RECHAZADA, etc.)
+List<Solicitud> findByEstadoInOrderByFechaSolicitudDesc(List<String> estados);
+
+    Optional<Solicitud> findTopByIdSolicitudOrderByFechaSolicitudDesc(String idSolicitud);
+List<Solicitud> findByEstadoAndTipo(String estado, String tipo);
 }
 

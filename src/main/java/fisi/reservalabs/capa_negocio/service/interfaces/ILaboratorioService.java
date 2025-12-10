@@ -9,5 +9,5 @@ public interface ILaboratorioService {
     LaboratorioDTO obtenerPorId(String idLaboratorio);
     LaboratorioDTO actualizarLaboratorio(String idLaboratorio, LaboratorioDTO dto);
     void eliminarLaboratorio(String idLaboratorio);
-    
+    List<LaboratorioDTO> listarLaboratoriosDisponibles();
 }

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de la solicitud</title>
+    <link rel="stylesheet" th:href="@{/Detalles/Detalle.css}">
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div th:replace="fragments/sidebarGestor :: sidebar-gestor"></div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="top-bar-right">
+        <div class="user-dropdown">
+
+            <button class="user-info-button" id="userToggle">
+                <div class="user-avatar" th:text="${#strings.substring(nombreGestor,0,1)}">U</div>
+                <span class="user-name" th:text="${nombreGestor}">Usuario</span>
+            </button>
+
+            <div class="dropdown-menu" id="userMenu">
+                    <button class="dropdown-item" th:data-link="@{/perfil}">
+                    Mi Perfil
+                </button>
+                    <button class="dropdown-item" id="logoutBtn">
+                        Salir
+                    </button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="main-content">
+
+    <div class="breadcrumb">
+        <a th:href="@{/principalGestor}">Página Principal</a> >>
+        <a th:href="@{/pendientes}">Solicitudes</a> >>
+        <span>Detalle de solicitud</span>
+    </div>
+
+    <h1 class="welcome-title">Detalles de solicitud</h1>
+
+    <div class="solicitud-card">
+
+        <!-- Estado -->
+        <div class="status-row">
+            <span class="status-label">Estado:</span>
+            <div class="status-badge"
+                 th:classappend="${solicitud.estado == 'PENDIENTE'} ? ' pending' :
+                                 (${solicitud.estado == 'RECHAZADA'} ? ' rejected' : ' completed')">
+                <span th:text="${solicitud.estado}">Pendiente</span>
+            </div>
+        </div>
+
+        <h3>Detalles:</h3>
+
+        <div class="solicitud-details">
+            <!-- Tipo de solicitud -->
+<div class="detail-item">
+    <!-- Icono para ASIGNACIÓN -->
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         th:if="${solicitud.tipo == 'ASIGNACION'}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12h6m-3-3v6m-6 7.5h12A2.25 2.25 0 0020.25 20V7.5
+                 L15 2.25H6A2.25 2.25 0 003.75 4.5v15A2.25 2.25 0 006 21z" />
+    </svg>
+
+    <!-- Icono para REASIGNACIÓN -->
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+         th:if="${solicitud.tipo == 'REASIGNACION'}">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4.5 4.5v6h6M19.5 19.5v-6h-6M5.25 19.5A8.25 8.25 0 0 0 18 9.75h1.5M6 14.25A8.25 8.25 0 0 1 18.75 4.5H17.25" />
+    </svg>
+
+    Tipo de solicitud:
+    <span id="tipoSolicitudText"
+          th:text="${solicitud.tipo == 'REASIGNACION' ? 'Reasignación' : 'Asignación'}">
+        Asignación
+    </span>
+</div>
+
+
+
+
+            <!-- Laboratorio -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25v9A2.25 2.25 0 0 1 18.75 16.5H5.25A2.25 2.25 0 0 1 3 14.25v-9Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 18h19.5" />
+                        </svg>
+                Lab:
+                <span th:text="${solicitud.idLaboratorio != null ? solicitud.idLaboratorio : 'Por asignar'}"></span>
+            </div>
+
+            <!-- Fecha -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Fecha:
+                <span th:with="fechaOK=${solicitud.fechaReserva.toInstant()
+                                          .atZone(T(java.time.ZoneId).of('UTC'))
+                                          .toLocalDate()
+                                          .plusDays(0)}"
+                      th:text="${#temporals.format(fechaOK, 'd MMM yyyy')}">
+                </span>
+            </div>
+
+            <!-- Horas -->
+            <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Hora:
+                <span th:text="${#temporals.format(solicitud.horaInicio.toLocalTime(), 'HH:mm')}"></span>
+                –
+                <span th:text="${#temporals.format(solicitud.horaFin.toLocalTime(), 'HH:mm')}"></span>
+                
+            </div>
+<!-- Requerimientos -->
+<div class="detail-item">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+         stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    Requerimientos:
+    <span id="reqText"
+          th:text="${solicitud.requerimientos != null ? solicitud.requerimientos : 'Sin requerimientos'}">
+        Sin requerimientos
+    </span>
+</div>
+
+        </div>
+
+        <!-- Botones -->
+        <div class="action-row">
+            <a class="btn-reject"
+            th:data-id="${solicitud.idSolicitud}"
+            th:data-fecha="${solicitud.fechaSolicitud}">
+                Rechazar solicitud
+            </a>
+
+            <a class="btn-accept"
+            th:data-id="${solicitud.idSolicitud}"
+            th:data-fecha="${solicitud.fechaSolicitud}">
+                Aceptar solicitud
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modalAceptado" class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 24 24"
+                 fill="none" stroke="#24c16b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2.5" y="3.5" width="19" height="14" rx="2.2" ry="2.2" stroke="#24c16b" stroke-width="1.8"/>
+                <path d="M8 20h8" stroke="#24c16b" stroke-width="1.8"/>
+                <path d="M12 17v3" stroke="#24c16b" stroke-width="1.8"/>
+                <path d="M9 10.8l2.1 2.1L15 9" stroke="#24c16b" stroke-width="2.2"/>
+            </svg>
+        </div>
+
+        <h2 class="modal-title">¡Solicitud aceptada!</h2>
+
+        <button id="btnModalOk" class="modal-btn">Aceptar</button>
+
+    </div>
+</div>
+
+<div id="modalRechazar" class="modal-overlay">
+    <div class="modal-content reject-modal">
+
+        <h2 class="reject-title">Rechazar solicitud</h2>
+
+        <p class="reject-text">
+            Estás a punto de rechazar esta solicitud.<br>
+            Indica el motivo:
+        </p>
+
+        <textarea id="motivoRechazo" class="reject-textarea" placeholder="Escribe el motivo aquí..."></textarea>
+
+        <div class="reject-actions">
+            <button id="btnRechazoCancelar" class="reject-btn cancel">Cancelar</button>
+            <button id="btnRechazoConfirmar" class="reject-btn confirm">Confirmar</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- JS -->
+<script th:src="@{/Detalles/Detalle.js}"></script>
+
+</body>
+</html>

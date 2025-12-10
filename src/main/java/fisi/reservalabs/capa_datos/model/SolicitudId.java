@@ -3,7 +3,6 @@ package fisi.reservalabs.capa_datos.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Data

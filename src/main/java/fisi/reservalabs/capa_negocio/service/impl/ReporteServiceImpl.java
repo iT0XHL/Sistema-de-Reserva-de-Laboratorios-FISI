@@ -1,20 +1,19 @@
 package fisi.reservalabs.capa_negocio.service.impl;
 
-import fisi.reservalabs.capa_datos.model.Reporte;
 import fisi.reservalabs.capa_datos.model.Empleado;
+import fisi.reservalabs.capa_datos.model.Reporte;
 import fisi.reservalabs.capa_datos.model.Solicitud;
 import fisi.reservalabs.capa_datos.model.SolicitudId;
 import fisi.reservalabs.capa_datos.repository.ReporteRepository;
-import fisi.reservalabs.capa_datos.repository.EmpleadoRepository;
 import fisi.reservalabs.capa_datos.repository.SolicitudRepository;
 import fisi.reservalabs.capa_negocio.dto.ReporteDTO;
-import fisi.reservalabs.capa_negocio.exception.ResourceNotFoundException;
 import fisi.reservalabs.capa_negocio.mapper.ReporteMapper;
 import fisi.reservalabs.capa_negocio.service.interfaces.IReporteService;
-
+import fisi.reservalabs.capa_negocio.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,84 +22,76 @@ public class ReporteServiceImpl implements IReporteService {
 
     @Autowired
     private ReporteRepository reporteRepository;
-
-    @Autowired
-    private EmpleadoRepository empleadoRepository;
-
-    @Autowired
-    private SolicitudRepository solicitudRepository;
-
-    @Override
-    public ReporteDTO crearReporte(ReporteDTO dto) {
-        Reporte entity = ReporteMapper.toEntity(dto);
-
-        // Cargar relaciones
-        Empleado empleado = empleadoRepository.findById(dto.getIdEmpleado())
-                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado"));
-        entity.setEmpleado(empleado);
-
-        // Solicitud (clave compuesta)
-        SolicitudId solicitudId = new SolicitudId();
-        solicitudId.setIdSolicitud(dto.getIdSolicitud());
-        solicitudId.setFechaSolicitud(dto.getFechaSolicitud());
-
-        Solicitud solicitud = solicitudRepository.findById(solicitudId)
-                .orElseThrow(() -> new ResourceNotFoundException("Solicitud no encontrada"));
-        entity.setSolicitud(solicitud);
-
-        reporteRepository.save(entity);
-        return ReporteMapper.toDTO(entity);
-    }
+@Autowired
+private SolicitudRepository solicitudRepository;
 
     @Override
     public List<ReporteDTO> listarReportes() {
-        return reporteRepository.findAll().stream()
+        return reporteRepository.findAll()
+                .stream()
                 .map(ReporteMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ReporteDTO obtenerPorId(String idReporte) {
-        Reporte entity = reporteRepository.findById(idReporte)
-                .orElseThrow(() -> new ResourceNotFoundException("Reporte no encontrado"));
-        return ReporteMapper.toDTO(entity);
+        Reporte reporte = reporteRepository.findById(idReporte)
+                .orElse(null); // o lanzar tu ResourceNotFoundException
+        return ReporteMapper.toDTO(reporte);
     }
 
     @Override
-    public ReporteDTO actualizarReporte(String idReporte, ReporteDTO dto) {
-        Reporte entity = reporteRepository.findById(idReporte)
-                .orElseThrow(() -> new ResourceNotFoundException("Reporte no encontrado"));
+    public ReporteDTO crearReportePorRechazo(Solicitud solicitud, Empleado empleado, String motivo) {
 
-        // Actualizar relaciones
-        if (dto.getIdEmpleado() != null) {
-            Empleado empleado = empleadoRepository.findById(dto.getIdEmpleado())
-                    .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado"));
-            entity.setEmpleado(empleado);
-        }
+        Reporte reporte = new Reporte();
 
-        if (dto.getIdSolicitud() != null && dto.getFechaSolicitud() != null) {
-            SolicitudId solicitudId = new SolicitudId();
-            solicitudId.setIdSolicitud(dto.getIdSolicitud());
-            solicitudId.setFechaSolicitud(dto.getFechaSolicitud());
+        // ID de reporte (haz aquí tu lógica real si tienes otra)
+        String nuevoId = generarIdReporte();
+        reporte.setIdReporte(nuevoId);
 
-            Solicitud solicitud = solicitudRepository.findById(solicitudId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Solicitud no encontrada"));
-            entity.setSolicitud(solicitud);
-        }
+        // Relaciones
+        reporte.setEmpleado(empleado);
+        reporte.setSolicitud(solicitud);
 
-        entity.setDescripcion(dto.getDescripcion());
-        entity.setTipoReporte(dto.getTipoReporte());
-        entity.setFechaEmision(dto.getFechaEmision());
+        // Campos que vienen de la solicitud
+        reporte.setDescripcion(motivo);                    // motivo del rechazo
+        reporte.setTipoReporte(solicitud.getTipo()); // "ASIGNACION"/"REASIGNACION" (ajusta nombre del getter)
 
-        reporteRepository.save(entity);
-        return ReporteMapper.toDTO(entity);
+        // Fecha actual
+        reporte.setFechaEmision(new Date());
+
+        reporte = reporteRepository.save(reporte);
+
+        return ReporteMapper.toDTO(reporte);
     }
-
+    
     @Override
-    public void eliminarReporte(String idReporte) {
-        Reporte entity = reporteRepository.findById(idReporte)
-                .orElseThrow(() -> new ResourceNotFoundException("Reporte no encontrado"));
-
-        reporteRepository.delete(entity);
+public ReporteDTO obtenerPorSolicitud(Solicitud solicitud) {
+    Reporte reporte = reporteRepository.findBySolicitud(solicitud)
+            .orElseThrow(() -> new ResourceNotFoundException("No existe reporte para esa solicitud"));
+    return ReporteMapper.toDTO(reporte);
+}
+    // Ejemplo simple, cámbialo si ya tienes otra forma de generar IDs
+    private String generarIdReporte() {
+        long count = reporteRepository.count() + 1;
+        return String.format("R%03d", count); // R001, R002, ...
     }
+
+@Override
+public ReporteDTO obtenerPorSolicitud(String idSolicitud, Date fechaSolicitud) {
+
+    // 1) Construir la clave compuesta de Solicitud
+    SolicitudId solicitudId = new SolicitudId(idSolicitud, fechaSolicitud);
+
+    // 2) Buscar la entidad Solicitud
+    Solicitud solicitud = solicitudRepository.findById(solicitudId)
+            .orElseThrow(() -> new ResourceNotFoundException("Solicitud no encontrada"));
+
+    // 3) Buscar el reporte asociado a esa solicitud
+    Reporte reporte = reporteRepository.findBySolicitud(solicitud)
+            .orElseThrow(() -> new ResourceNotFoundException("No existe reporte para esa solicitud"));
+
+    // 4) Devolver DTO
+    return ReporteMapper.toDTO(reporte);
+}
 }

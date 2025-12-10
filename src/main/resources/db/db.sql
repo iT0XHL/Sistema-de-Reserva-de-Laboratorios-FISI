@@ -6,7 +6,8 @@ USE reservas_lab;
 CREATE TABLE Usuario (
     idUsuario VARCHAR(50) PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    contraseña VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
     rol VARCHAR(50) NOT NULL
@@ -18,7 +19,7 @@ CREATE TABLE Empleado (
     nombreCompleto VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL,
     usuarioLogin VARCHAR(50) NOT NULL,
-    contraseña VARCHAR(100) NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
     cargo VARCHAR(50) NOT NULL
 );
 
@@ -31,11 +32,11 @@ CREATE TABLE Laboratorio (
     especificaciones JSON
 );
 
--- Tabla de solicitud de asignación (con PK compuesta)
-CREATE TABLE Asignacion (
-    idAsignacion VARCHAR(50) NOT NULL,
+-- Tabla de solicitud de asignaciÃ³n (con PK compuesta)
+CREATE TABLE Solicitud (
+    idSolicitud VARCHAR(50) NOT NULL,
     idUsuario VARCHAR(50) NOT NULL,
-    idLaboratorio VARCHAR(50) NOT NULL,
+    idLaboratorio VARCHAR(50) ,
     idEmpleado VARCHAR(50),
     estado VARCHAR(50) NOT NULL,
     fechaSolicitud DATETIME NOT NULL,
@@ -44,7 +45,8 @@ CREATE TABLE Asignacion (
     horaFin TIME NOT NULL,
     motivo VARCHAR(255),
     tipo VARCHAR(50),
-    PRIMARY KEY (idAsignacion, fechaSolicitud),
+    requerimientos JSON NULL,
+    PRIMARY KEY (idSolicitud, fechaSolicitud),
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
     FOREIGN KEY (idLaboratorio) REFERENCES Laboratorio(idLaboratorio),
     FOREIGN KEY (idEmpleado) REFERENCES Empleado(idEmpleado)
@@ -55,12 +57,12 @@ CREATE TABLE Asignacion (
 CREATE TABLE Reporte (
     idReporte VARCHAR(50) PRIMARY KEY,
     idEmpleado VARCHAR(50) NOT NULL,
-    idSolicitudAsignacion VARCHAR(50) NOT NULL,
+    idSolicitud VARCHAR(50) NOT NULL,
     fechaSolicitud DATETIME NOT NULL,
     descripcion VARCHAR(255),
     tipoReporte VARCHAR(50),
     fechaEmision DATE NOT NULL,
     FOREIGN KEY (idEmpleado) REFERENCES Empleado(idEmpleado),
-    FOREIGN KEY (idSolicitudAsignacion, fechaSolicitud)
-        REFERENCES Asignacion(idAsignacion, fechaSolicitud)
+    FOREIGN KEY (idSolicitud, fechaSolicitud)
+        REFERENCES Solicitud(idSolicitud, fechaSolicitud)
 );

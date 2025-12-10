@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar Laboratorio</title>
+    <link rel="stylesheet" th:href="@{/Asignacion/AsignacionStyle.css}">
+</head>
+
+<body th:attr="
+        data-id-solicitud=${solicitud.idSolicitud},
+        data-fecha-solicitud=${#dates.format(solicitud.fechaSolicitud, 'yyyy-MM-dd''T''HH:mm:ssXXX')},
+        data-hora-inicio=${#strings.substring(solicitud.horaInicio,0,5)},
+        data-hora-fin=${#strings.substring(solicitud.horaFin,0,5)}
+">
+
+    <!-- SIDEBAR -->
+    <div th:replace="fragments/sidebarGestor :: sidebar-gestor"></div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="user-dropdown">
+                <button class="user-info-button" id="userToggle">
+                    <div class="user-avatar"
+                         th:text="${#strings.substring(nombreGestor,0,1)}">U</div>
+                    <span class="user-name" th:text="${nombreGestor}">Usuario</span>
+                </button>
+
+                <div class="dropdown-menu" id="userMenu">
+                    <button class="dropdown-item" th:attr="data-link=@{/gestor/perfil}">
+                        Mi Perfil
+                    </button>
+                    <button class="dropdown-item" id="logoutBtn">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSICIÓN ENTRE PÁGINAS -->
+    <div class="transition-container" id="pageTransition">
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+        <div class="transition-bar"></div>
+    </div>
+
+    <!-- CONTENIDO CENTRAL -->
+    <div class="asignacion-container">
+
+        <!-- CONTENIDO PRINCIPAL SUPERIOR -->
+        <div class="main-content">
+
+            <!-- BREADCRUMB -->
+            <div class="breadcrumb">
+                <a th:href="@{/principalGestor}">Página Principal</a>
+                <span class="breadcrumb-separator"> » </span>
+                <a th:href="@{/laboratorio}">Asignar laboratorio</a>
+                <span class="breadcrumb-separator"> » </span>
+                <span>Laboratorio</span>
+            </div>
+
+            <!-- (si no usas este contenedor dinámico puedes quitarlo) -->
+            <div id="solicitudesContainer" class="solicitudes-container"></div>
+        </div>
+        <br>
+
+        <!-- TÍTULO PRINCIPAL -->
+        <h1 class="titulo-pagina">
+            Solicitud 
+            <span th:text="${solicitud.idSolicitud}">S000</span>
+            &nbsp;–&nbsp;
+            Usuario 
+            <span th:text="${solicitud.idUsuario}">U000</span>
+            &nbsp;–&nbsp;
+            <span th:text="${usuarioNombre}">Nombre usuario</span>
+        </h1>
+
+        <!-- BOTÓN REGRESAR DEBAJO DEL TÍTULO -->
+        <div class="action-row action-row-top">
+            <a href="javascript:history.back()" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Regresar
+            </a>
+        </div>
+        <br><br>
+
+        <div class="asignacion-grid">
+
+            <!-- DETALLES DE LA SOLICITUD -->
+            <div class="detalle-solicitud">
+
+                <h2>Detalles de la solicitud:</h2>
+
+                <div class="detalle-item">
+                    <strong>Usuario:</strong>
+                    <span th:text="${solicitud.idUsuario}">U000</span>
+                    &nbsp;-&nbsp;
+                    <span th:text="${usuarioNombre}">Nombre usuario</span>
+                </div>
+
+                <!-- FECHA -->
+                <div class="detalle-item">
+                    <strong>Fecha:</strong>
+                    <span th:text="${#dates.format(solicitud.fechaReserva, 'dd/MM/yyyy')}">
+                        19/11/2024
+                    </span>
+                </div>
+
+                <!-- HORA -->
+                <div class="detalle-item">
+                    <strong>Hora:</strong>
+                    <span th:text="${#strings.substring(solicitud.horaInicio, 0, 5)}">10:00</span>
+                    &nbsp;-&nbsp;
+                    <span th:text="${#strings.substring(solicitud.horaFin, 0, 5)}">12:00</span>
+                </div>
+
+                <!-- REQUERIMIENTOS -->
+                <h3>Requerimientos:</h3>
+                <div class="detalle-item">
+                    <span id="reqText"
+                          th:text="${solicitud.requerimientos != null ? solicitud.requerimientos : 'Sin requerimientos'}">
+                        Sin requerimientos
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- LABORATORIOS DINÁMICOS -->
+            <div class="laboratorios-disponibles">
+
+                <h2>Laboratorios disponibles:</h2>
+
+                <div class="labs-container">
+
+                    <div class="lab-card" th:each="lab : ${labsDisponibles}">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="55" height="55"
+     style="display:block; width:55px; height:55px; flex-shrink:0;"
+     fill="none" stroke="white" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="12" rx="2" ry="2"/>
+    <line x1="2" y1="20" x2="22" y2="20"/>
+</svg>
+
+
+                        <div class="lab-info">
+                            <h3 th:text="${lab.nombreLab}">Laboratorio</h3>
+
+                            <p>
+                                <strong>Capacidad:</strong>
+                                <span th:text="${lab.equipos}">40</span>
+                            </p>
+
+                            <p>
+                                <strong>Software:</strong>
+                                <span th:text="${#strings.listJoin(lab.software, ', ')}">
+                                    Windows 10, Office
+                                </span>
+                            </p>
+                        </div>
+
+                        <button class="btn-asignar"
+                                th:attr="data-id=${lab.idLaboratorio},data-nombre=${lab.nombreLab}">
+                            Asignar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN -->
+    <div id="modalReasignacion" class="modal-overlay">
+        <div class="modal-box">
+
+            <h2>Confirmar asignación</h2>
+
+            <div class="modal-info">
+                <p><strong>Laboratorio:</strong> <span id="modalLab"></span></p>
+                <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
+                <p>
+                    <strong>Inicio:</strong> <span id="modalInicio"></span>
+                    &nbsp;&nbsp;
+                    <strong>Fin:</strong> <span id="modalFin"></span>
+                </p>
+            </div>
+
+            <p class="modal-question">¿Desea confirmar la asignación?</p>
+
+            <div class="modal-actions">
+                <button class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
+                <button class="btn-confirmar" id="btnConfirmarModal">Confirmar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script th:src="@{/Asignacion/AsignacionScripts.js}"></script>
+</body>
+
+</html>

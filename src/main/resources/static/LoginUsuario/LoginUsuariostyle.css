@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #0F0D0D;
     display: flex;
@@ -10,27 +14,66 @@ body {
 
 .login-container {
     background-color: #1a1a1a;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 350px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    z-index: 10;
+    padding: 2.5rem 2.3rem;
+    border-radius: 14px;
+    width: 360px;
+    position: relative;
+    box-shadow: 
+        0 0 12px rgba(100, 142, 207, 0.15),
+        0 0 25px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(2px);
+    animation: zoomIn 0.35s ease;
+}
+
+.back-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.user-badge {
+    display: block;
+    font-size: 0.85rem;
+    color: #4A90E2;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
 }
 
 .login-title {
     color: white;
     font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
     font-weight: 600;
 }
 
 .input-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     position: relative;
 }
 
 .input-field {
-    width: 92%;
+    width: 100%;
     padding: 0.75rem;
     border: 1px solid #444;
     border-radius: 6px;
@@ -42,7 +85,7 @@ body {
 
 .input-field:focus {
     outline: none;
-    border-color: #666;
+    border-color: #4A90E2;
 }
 
 .input-field::placeholder {
@@ -51,29 +94,43 @@ body {
 
 .password-toggle {
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #aaa;
 }
 
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
 .login-button {
-    width: 41%;
-    padding: 0.75rem;
-    margin-left: 205px;
-    background-color: #648ECF;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(145deg, #4A90E2, #357cc9);
+    box-shadow: 0 0 6px #4a90e299;
     color: white;
     border: none;
     border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
     font-weight: 500;
+    transition: 0.25s ease-in-out;
 }
 
 .login-button:hover {
-    background-color: #4382e0;
+    background: linear-gradient(145deg, #5aa0f7, #3d88d4);
+    box-shadow:
+        0 0 10px #4a90e2cc,
+        0 0 20px #357cc999;
+    transform: translateY(-2px);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 @media (max-width: 400px) {
@@ -83,7 +140,7 @@ body {
     }
 }
 
-/*Ventana modal (Lo del error pes)*/
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -91,69 +148,136 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.modal {
+    background: linear-gradient(145deg, #1a1a1a, #222);
+    padding: 2.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(220, 53, 69, 0.2);
+    position: relative;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-icon {
+    margin-bottom: 1.2rem;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.modal {
-    background-color: #f0f0f0;
-    padding: 2rem;
-    border-radius: 12px;
-    text-align: center;
-    max-width: 400px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s ease-out;
-}
-
-.modal-icon {
-    margin-bottom: 1rem;
-}
-
 .modal-icon svg {
-    width: 100px;
-    height: 100px;
-    color: #c02424;
+    width: 65px;
+    height: 65px;
+    color: #ff4b4b;
+    filter: drop-shadow(0 0 8px rgba(255, 75, 75, 0.4));
+    animation: shake 0.5s ease-in-out;
 }
 
 .modal-title {
-    color: #333;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
     font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.modal p { 
+    color: #aaa;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
 }
 
 .modal-button {
-    padding: 0.5rem 1rem;
-    background-color: #d92b2b;
+    margin-top: 1.5rem;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(145deg, #d32f2f, #b71c1c);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
     font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    width: 100%;
 }
 
 .modal-button:hover {
-    background-color: #c02424;
+    background: linear-gradient(145deg, #f44336, #d32f2f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
 }
 
-@keyframes fadeIn {
-    from {
+@keyframes popIn {
+    0% {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.8) translateY(20px);
     }
-    to {
+    100% {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateY(0);
     }
 }
 
-@media (max-width: 400px) {
-    .login-container {
-        width: 90%;
-        padding: 1.5rem;
-    }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+
+
+/* --- TRANSICIÓN DE SALIDA (CORTINA) --- */
+.transition-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.transition-bar {
+    flex: 1;
+    height: 100%;
+    background-color: #4A90E2;
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.transition-bar:nth-child(2) {
+    background-color: #357cc9;
+}
+.transition-bar:nth-child(3) {
+    background-color: #1a1a1a;
+}
+
+.transition-container.active .transition-bar {
+    transform: translateY(0);
+}
+
+/* --- SECUENCIA (DELAY) --- */
+
+.transition-container.active .transition-bar:nth-child(1) {
+    transition-delay: 0s;
+}
+.transition-container.active .transition-bar:nth-child(2) {
+    transition-delay: 0.1s; 
+}
+.transition-container.active .transition-bar:nth-child(3) {
+    transition-delay: 0.2s;
 }

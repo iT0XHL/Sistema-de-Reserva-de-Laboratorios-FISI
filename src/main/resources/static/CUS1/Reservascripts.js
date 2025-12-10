@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const transitionContainer = document.getElementById('pageTransition');
+    
+    // Pequeño timeout para asegurar que el navegador renderice el estado inicial antes de animar
+    setTimeout(() => {
+        if (transitionContainer) {
+            transitionContainer.classList.add('slide-out');
+        }
+    }, 100);
+});
+document.querySelectorAll('.dropdown-item[data-link]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const destino = btn.getAttribute('data-link');
+        if (destino) {
+            window.location.href = destino;
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const collapseBtn = document.getElementById('collapseBtn');
     let isCollapsed = false;
@@ -92,29 +110,32 @@ document.querySelectorAll('.menu-item').forEach(item => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const userToggle = document.getElementById('userToggle');
+const userToggle = document.getElementById('userToggle');
     const userMenu = document.getElementById('userMenu');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    userToggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        userMenu.classList.toggle('show');
-    });
+    if (userToggle && userMenu) {
+        userToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('show');
+        });
 
-    document.addEventListener('click', function (e) {
-        if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
-            userMenu.classList.remove('show');
-        }
-    });
+        document.addEventListener('click', function (e) {
+            if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+    }
 
-    userMenu.querySelector('[data-link="perfil.html"]').addEventListener('click', function () {
-        window.location.href = ''/*Agregar ruta dps*/;
-    });
-
-    logoutBtn.addEventListener('click', function () {
-        if (confirm('¿Seguro que deseas cerrar sesión?')) {
-            window.location.href = '../Login/Login.html';
-        }
-    });
-});
+    // ==================================================================
+    // 5. LOGOUT FUNCTIONALITY
+    // ==================================================================
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (confirm("¿Seguro que deseas cerrar sesión?")) {
+                window.location.href = "/loginUsuario";
+            }
+        });
+    }

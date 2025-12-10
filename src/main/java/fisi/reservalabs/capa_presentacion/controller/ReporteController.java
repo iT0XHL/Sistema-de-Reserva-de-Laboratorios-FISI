@@ -14,6 +14,8 @@ public class ReporteController {
     @Autowired
     private IReporteService reporteService;
 
+    
+
     @GetMapping
     public List<ReporteDTO> listarReportes() {
         return reporteService.listarReportes();
@@ -24,18 +26,4 @@ public class ReporteController {
         return reporteService.obtenerPorId(id);
     }
 
-    @PostMapping
-    public ReporteDTO crearReporte(@RequestBody ReporteDTO dto) {
-        return reporteService.crearReporte(dto);
-    }
-
-    @PutMapping("/{id}")
-    public ReporteDTO actualizarReporte(@PathVariable String id, @RequestBody ReporteDTO dto) {
-        return reporteService.actualizarReporte(id, dto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminarReporte(@PathVariable String id) {
-        reporteService.eliminarReporte(id);
-    }
 }

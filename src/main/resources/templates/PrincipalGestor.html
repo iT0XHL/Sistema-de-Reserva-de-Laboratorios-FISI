@@ -8,9 +8,8 @@
 </head>
 <body>
 
-    <!-- Sidebar reutilizable del gestor -->
+    <!-- Sidebar -->
     <div th:replace="fragments/sidebarGestor :: sidebar-gestor"></div>
-
 
     <div class="top-bar">
         <div class="top-bar-right">
@@ -20,126 +19,62 @@
                     <span class="user-name" th:text="${nombreGestor}">Usuario</span>
                 </button>
                 <div class="dropdown-menu" id="userMenu">
-                    <button class="dropdown-item" data-link="perfil.html">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 2.5-2.5 2.5S9.5 14 9.5 13c0-.5.5-1 1-1h2c.5 0 1 .5 1 1z"/>
-                            <path d="M11 9H9v3H8V9H6V8h5v1z"/>
-                        </svg>
+                    <button class="dropdown-item" th:data-link="@{/gestor/perfil}">
                         Mi Perfil
                     </button>
                     <button class="dropdown-item" id="logoutBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
-                            <path d="M8 4a1 1 0 0 1 1 1v2H7V5a1 1 0 0 1 1-1z"/>
-                            <path d="M7 5h2v2H7z"/>
-                        </svg>
                         Salir
                     </button>
                 </div>
             </div>
         </div>
     </div>
+<div class="transition-container" id="pageTransition">
+    <div class="transition-bar"></div>
+    <div class="transition-bar"></div>
+    <div class="transition-bar"></div>
+</div>
 
     <div class="main-content">
-        <h1 class="welcome-title">Bienvenido, <span th:text="${nombreGestor}">Gestor</span>!</h1>
+        <h1 class="welcome-title">
+            Bienvenido, <span th:text="${nombreGestor}">Gestor</span>!
+        </h1>
 
         <div class="content-section">
-            <div class="section-title">Solicitudes Pendientes:</div>
-            
-            <!-- ========= RESERVAS DINÁMICAS PARA EL GESTOR ========= -->
-            <div class="reservations-container">
-
-                <div class="reservation-card"
-                    th:each="solicitud, i : ${solicitudes}">
-
-                    <!-- Estado -->
-                    <div class="reservation-status">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                        <span th:text="${solicitud.estado}">Aceptada</span>
-                    </div>
-
-                    <!-- Título -->
-                    <div class="reservation-title">
-                        Reserva #<span th:text="${i.index + 1}">1</span>
-                    </div>
-
-                    <!-- Detalles -->
-                    <div class="reservation-details">
-
-                        <!-- Laboratorio -->
-                        <div class="detail-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 
-                                        15 18.257V17.25m6-12V15a2.25 2.25 
-                                        0 0 1-2.25 2.25H5.25A2.25 2.25 
-                                        0 0 1 3 15V5.25" />
-                            </svg>
-                            <span th:text="${solicitud.idLaboratorio}">Lab 1</span>
-                        </div>
-
-                        <!-- Fecha -->
-                        <div class="detail-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 
-                                        0 002-2V7a2 2 0 00-2-2H5a2 2 
-                                        0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span th:text="${#dates.format(solicitud.fechaReserva,'dd/MM/yyyy')}">
-                                01/01/2024
-                            </span>
-                        </div>
-
-                        <!-- Hora -->
-                        <div class="detail-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6v6h4.5m4.5 0a9 9 
-                                        0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-
-                            <span th:text="${#dates.format(solicitud.horaInicio,'HH:mm')}"></span>
-                            -
-                            <span th:text="${#dates.format(solicitud.horaFin,'HH:mm')}"></span>
-                        </div>
-
-                    </div>
-
-                    <button class="view-details-btn">Más detalles</button>
-                </div>
+            <div class="section-title">Algunas Solicitudes Pendientes:</div>
+<div id="pendientesHomeContainer" class="solicitudes-container">
+    <!-- Aquí se insertarán las mismas tarjetas que en /pendientes -->
+</div>
+<br>
+            <!-- solicitudes pendientes conforma todo este div-->
+            <div class="reservations-container" id="reservationsContainer">
 
             </div>
-            <!-- ====================================================== -->
 
             <div class="section-title">Accesos directos:</div>
-            
+
             <div class="direct-access-container">
-                
-                <div class="access-button" th:data-link="@{/reasignacion}" >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#D9D9D9" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+
+                <div class="access-button" th:data-link="@{/laboratorio}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#D9D9D9">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
                     </svg>
-                    <div class="access-label">reasignar</div>
+                    <div class="access-label">Asignar Laboratorio</div>
                 </div>
-                
+
                 <div class="access-button" th:data-link="@{/pendientes}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" fill="none" viewBox="0 0 24 24" stroke="#D9D9D9">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    <div class="access-label">Solicitudes</div>
+                    <div class="access-label">Solicitudes Pendientes</div>
                 </div>
+
             </div>
         </div>
     </div>
+
     <script th:src="@{/PrincipalGestor/PrincipalGestorscripts.js}"></script>
 </body>
 </html>

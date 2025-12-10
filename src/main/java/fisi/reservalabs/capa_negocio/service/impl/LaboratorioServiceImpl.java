@@ -60,4 +60,14 @@ public class LaboratorioServiceImpl implements ILaboratorioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Laboratorio no encontrado"));
         laboratorioRepository.delete(laboratorio);
     }
+
+    @Override
+    public List<LaboratorioDTO> listarLaboratoriosDisponibles() {
+
+        return laboratorioRepository.findByEstado("ACTIVO")
+                .stream()
+                .map(LaboratorioMapper::toDTO)
+                .peek(LaboratorioDTO::procesarEspecificaciones)
+                .collect(Collectors.toList());
+    }
 }
