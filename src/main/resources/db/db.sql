@@ -1,3 +1,7 @@
+-- Crear la base de datos
+CREATE DATABASE reservas_lab;
+USE reservas_lab;
+
 -- Tabla de usuarios
 CREATE TABLE Usuario (
     idUsuario VARCHAR(50) PRIMARY KEY,
